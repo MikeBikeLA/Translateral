@@ -2,6 +2,7 @@
     "name": "Translateral",
     "version": "0.1",
     "description": "Actually learn your language!",
+    "permissions": ["storage"],
     "background": {
         "scripts": ["background.js"],
         "persistent": false
