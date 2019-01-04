@@ -9,7 +9,7 @@ for (var i = 0; i < elements.length; i++) {
             var text = node.nodeValue;
             var replacedText = text;
             for (var candidate in dict){
-                var re = new RegExp('^'+candidate+'$', "gi");
+                var re = new RegExp('^'+candidate, "gi");
                 replacedText = replacedText.replace(re, dict[candidate]);
             }
             if (replacedText !== text) {
