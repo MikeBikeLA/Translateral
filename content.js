@@ -1,7 +1,8 @@
+var language = "zh_CN";
 var elements = document.getElementsByTagName('*');
+
 for (var i = 0; i < elements.length; i++) {
     var element = elements[i];
-
     for (var j = 0; j < element.childNodes.length; j++) {
         var node = element.childNodes[j];
 
@@ -9,7 +10,7 @@ for (var i = 0; i < elements.length; i++) {
             var text = node.nodeValue;
             var replacedText = text;
             for (var candidate in dict){
-                var re = new RegExp('^('+candidate+"es)|("+candidate+"s)|("+candidate+")","gi");
+                var re = new RegExp("\\b"+candidate+"es\\b|\\b"+candidate+"s\\b|\\b"+candidate+"\\b","gi");
                 replacedText = replacedText.replace(re, dict[candidate]);
             }
             if (replacedText !== text) {
