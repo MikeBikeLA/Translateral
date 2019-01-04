@@ -17,6 +17,7 @@
                 "*://*/*"
             ],
             "js": [
+                "dictionary.js",
                 "content.js"
             ],
             "run_at": "document_end"
