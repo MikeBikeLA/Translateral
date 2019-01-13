@@ -1,0 +1,24 @@
+body, html {
+  height: 100%;
+}
+.bg {
+  /* The image used */
+  background-image: url('bg_domo_2.jpg');
+
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.accordion .card {
+  background-color: rgba(245, 245, 245, .4);
+}
+.accordion .card-header {
+  opacity: 1 !important;
+}
+.accordion .card-body {
+  opacity: 1 !important;
+}
