@@ -1,5 +1,47 @@
 // GLOBALS
-var dict = {}; // dictionary constant used in content.js
+// var dict = {}; // dictionary constant used in content.js
+
+// Saves the dict to chrome.storage
+// Called when chrome.storage.sync.get() is called asynchronously
+function saveDict(dict){
+	chrome.storage.sync.set({"dict": dict});
+	console.log("saved dict to chrome.storage");
+}
+// Takes in a table and returns dict with key, value pairs
+function arrayToDict(array) {
+	// get locale to use from user settings
+	chrome.storage.sync.get({
+	    locale: "zh_CN" // default is Chinese (Simplified)
+	  }, function(items) {
+	    var dict = {}; // dictionary to construct and save
+	    const locale = items.locale;
+	    // this is an asynchronous function, so the following code will run once
+	    // get() gets called at some undetermined time in the future
+	    for (let i = 0; i < array.length; i++) {
+			// iterate through each row
+			// first row is the header row
+			if (i === 0){
+				// find the column for the locale we want
+				for (let j = 0; j < array[i].length; j++) {
+					if (array[i][j] === "en_US"){
+						var english_col = j;
+						console.log("Found en_US in column " + english_col);
+					}
+					if (array[i][j] == locale){
+						var trans_col = j;
+						console.log("Found " + locale + " in column " + trans_col);
+						break;
+					}
+				}
+				continue;
+			}
+			// add each english word and it's translation to the dict
+			dict[array[i][english_col]] = array[i][trans_col];
+		}
+		console.log("Constructed dict (" + Object.keys(dict).length + " entries)");
+		saveDict(dict);
+ 	 });
+}
 
 // Parses the CSV file into a table based on user settings
 // Taken from @niry
@@ -18,43 +60,11 @@ function csvToArray(text) {
         } else row[i] += l;
         p = l;
     }
+    console.log("Constructed array (" + ret.length + " entries including header)");
     arrayToDict(ret);
 };
 
-// Takes in a table and populates dict with key, value pairs,
-// (plus tags and romanization)
-function arrayToDict(array) {
-	// get locale to use from user settings
-	var locale = "zh_CN"; // hardcoded to zh_CN for now
-	chrome.storage.sync.get({
-	    locale: "zh_CN" // default is Chinese (Simplified)
-	  }, function(items) {
-	    locale = items.locale;
-	  });
-	// figure out how to set locale properly from storage sync
-	for (let i = 0; i < array.length; i++) {
-		// iterate through each row
-		// first row is the header row
-		if (i === 0){
-			// find the column for the locale we want
-			for (let j = 0; j < array[i].length; j++) {
-				if (array[i][j] === "en_US"){
-					var english_col = j;
-					console.log("Found en_US in column " + english_col);
-				}
-				if (array[i][j] == locale){
-					var trans_col = j;
-					console.log("Found " + locale + " in column " + trans_col);
-					break;
-				}
-			}
-		}
-		// add each english word and it's translation to the dict
-		dict[array[i][english_col]] = array[i][trans_col];
-	}
-}
-
-// Loads the dictionary into the global dict
+// Loads the dictionary into chrome.storage
 function load_dict(){
 	// const dict = {
 	// 	"banana": "香蕉",
@@ -64,13 +74,15 @@ function load_dict(){
 	// 	"child": "小孩",
 	// 	"ocean": "海"
 	// }
-	console.log("Fetching vocab_mini.csv");
+	console.log("Fetching vocab.csv from Github");
 	fetch('https://raw.githubusercontent.com/MikeBikeLA/Translateral/master/vocab.csv')
 		.then(response => response.text())
 		.then(text => csvToArray(text));
 	// console.log(dict);
+	// Send dict to content.js
+	
 }
 
 // Run the load_dict function
-
-load_dict();
+// load_dict();
+console.log("dictionary.js loaded");

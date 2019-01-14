@@ -5,11 +5,12 @@
     "permissions": ["storage"],
     "background": {
         "scripts": [
+            "dictionary.js",
             "background.js"
         ],
         "persistent": false
     },
-    "content_security_policy": "script-src newtab_objects.html; object-src 'self'",
+    // "content_security_policy": "script-src newtab_objects.html; object-src 'self'",
     "manifest_version": 2,
     "chrome_url_overrides" : {
         "newtab": "newtab.html"
@@ -22,9 +23,8 @@
                 "https://*/*"
             ],
             "js": [
-                "dictionary.js",
-                "content.js",
-                "jquery.min.js"
+                "content.js"
+                // "jquery.min.js"
             ],
             "run_at": "document_end"
         }

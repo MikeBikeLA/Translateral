@@ -1,8 +1,7 @@
 // The main replacement algorithm
-// PRE: const dict (dictionary.js) is populated
-function replace(){
-    console.log("Dictionary has " + dict.length + " entries");
-    console.log(dict);
+function replace(dict){
+    // console.log("Dictionary has " + dict.length + " entries");
+    console.log("Starting replacement algorithm");
     const elements = document.getElementsByTagName('*');
     for (let i = 0; i < elements.length; i++) {
         const element = elements[i];
@@ -24,7 +23,18 @@ function replace(){
             
         }
     }
+    console.log("Completed!");
+}
+
+// Since this content.js file will run from the start each time a new page
+// is loaded, we need to retrieveDict from chrome.storage each time
+function retrieveDict(){
+    chrome.storage.sync.get("dict", function(dict_wrapper) {
+        console.log("dict retrieved: " + Object.keys(dict_wrapper.dict).length + " entries")
+        replace(dict_wrapper.dict);
+     });
 }
 
 // Run the main function
-replace();
+// replace();
+retrieveDict();
