@@ -13,8 +13,11 @@ body, html {
   background-repeat: no-repeat;
   background-size: cover;
 }
+.topstuff {
+  color:white;
+}
 .accordion .card {
-  background-color: rgba(245, 245, 245, .4);
+  background-color: rgba(245, 245, 245, .5);
 }
 .accordion .card-header {
   opacity: 1 !important;
