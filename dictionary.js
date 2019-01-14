@@ -1,12 +1,10 @@
-// GLOBALS
-// var dict = {}; // dictionary constant used in content.js
-
 // Saves the dict to chrome.storage
 // Called when chrome.storage.sync.get() is called asynchronously
 function saveDict(dict){
 	chrome.storage.sync.set({"dict": dict});
-	console.log("saved dict to chrome.storage");
+	console.log("saved dict (" + Object.keys(dict).length + " entries) to chrome.storage");
 }
+
 // Takes in a table and returns dict with key, value pairs
 function arrayToDict(array) {
 	// get locale to use from user settings
@@ -62,27 +60,14 @@ function csvToArray(text) {
     }
     console.log("Constructed array (" + ret.length + " entries including header)");
     arrayToDict(ret);
-};
+}
 
 // Loads the dictionary into chrome.storage
 function load_dict(){
-	// const dict = {
-	// 	"banana": "香蕉",
-	// 	"pineapple": "菠萝",
-	// 	"apple": "苹果",
-	// 	"book": "书",
-	// 	"child": "小孩",
-	// 	"ocean": "海"
-	// }
 	console.log("Fetching vocab.csv from Github");
 	fetch('https://raw.githubusercontent.com/MikeBikeLA/Translateral/master/vocab.csv')
 		.then(response => response.text())
 		.then(text => csvToArray(text));
-	// console.log(dict);
-	// Send dict to content.js
-	
 }
 
-// Run the load_dict function
-// load_dict();
 console.log("dictionary.js loaded");
