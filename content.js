@@ -27,8 +27,8 @@ function replace(dict){
 }
 
 // Since this content.js file will run from the start each time a new page
-// is loaded, we need to retrieveDict from chrome.storage each time
-function retrieveDict(){
+// is loaded, we need to retrieve_dict from chrome.storage each time
+function retrieve_dict(){
     chrome.storage.sync.get("dict", function(dict_wrapper) {
         console.log("dict retrieved: " + Object.keys(dict_wrapper.dict).length + " entries")
         replace(dict_wrapper.dict);
@@ -37,4 +37,4 @@ function retrieveDict(){
 
 // Run the main function
 // replace();
-retrieveDict();
+retrieve_dict();

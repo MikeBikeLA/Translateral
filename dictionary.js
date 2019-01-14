@@ -1,12 +1,12 @@
 // Saves the dict to chrome.storage
 // Called when chrome.storage.sync.get() is called asynchronously
-function saveDict(dict){
+function save_dict(dict){
 	chrome.storage.sync.set({"dict": dict});
 	console.log("saved dict (" + Object.keys(dict).length + " entries) to chrome.storage");
 }
 
 // Takes in a table and returns dict with key, value pairs
-function arrayToDict(array) {
+function array_to_dict(array) {
 	// get locale to use from user settings
 	chrome.storage.sync.get({
 	    locale: "zh_CN" // default is Chinese (Simplified)
@@ -37,14 +37,14 @@ function arrayToDict(array) {
 			dict[array[i][english_col]] = array[i][trans_col];
 		}
 		console.log("Constructed dict (" + Object.keys(dict).length + " entries)");
-		saveDict(dict);
+		save_dict(dict);
  	 });
 }
 
 // Parses the CSV file into a table based on user settings
 // Taken from @niry
 // https://stackoverflow.com/questions/8493195/how-can-i-parse-a-csv-string-with-javascript-which-contains-comma-in-data
-function csvToArray(text) {
+function csv_to_array(text) {
 	// console.log(text);
     let p = '', row = [''], ret = [row], i = 0, r = 0, s = !0, l;
     for (l of text) {
@@ -59,7 +59,7 @@ function csvToArray(text) {
         p = l;
     }
     console.log("Constructed array (" + ret.length + " entries including header)");
-    arrayToDict(ret);
+    array_to_dict(ret);
 }
 
 // Loads the dictionary into chrome.storage
@@ -67,7 +67,7 @@ function load_dict(){
 	console.log("Fetching vocab.csv from Github");
 	fetch('https://raw.githubusercontent.com/MikeBikeLA/Translateral/master/vocab.csv')
 		.then(response => response.text())
-		.then(text => csvToArray(text));
+		.then(text => csv_to_array(text));
 }
 
 console.log("dictionary.js loaded");
