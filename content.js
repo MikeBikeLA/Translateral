@@ -35,6 +35,38 @@ function retrieve_dict(){
      });
 }
 
-// Run the main function
-// replace();
+// Inject the definition popup window into the page (styles.css #def_window)
+function create_def_window(){
+    // create the def_window div
+    const def_window = document.createElement("DIV"); // <div>
+    def_window.setAttribute("id", "def_window");
+    // add child paragraphs to def_window
+    const headword = document.createElement("P"); // <p>
+    const hw_text = document.createTextNode("占位符"); // placeholder
+    headword.appendChild(hw_text); // between <p> and </p>
+
+    document.body.appendChild(def_window);
+    console.log("def_window created");
+}
+
+// Retrieve the dict from chrome.storage and do the replacement
 retrieve_dict();
+create_def_window();
+
+// This function will be called upon user mousing over the element
+function mouse_over(element){
+    console.log("mouse_over called");
+    const def_window = document.getElementById("def_window");
+    if (!def_window){
+        console.log("def_window was not found in the page!");
+        return;
+    }
+    // get location of mouse cursor
+    // update the def_window information
+    // make def_window visible
+}
+
+// This function will be called upon user mousing out of the element
+function mouse_out(){
+    // make def_window not visible
+}

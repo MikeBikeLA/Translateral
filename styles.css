@@ -25,3 +25,7 @@ body, html {
 .accordion .card-body {
   opacity: 1 !important;
 }
+#def_window{
+  background-color:black;
+  visibility:hidden;
+}
