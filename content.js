@@ -1,3 +1,8 @@
+// Marks the candidate word with an underline and adds mouse over functionality
+function mark_word(dict, text_to_replace){
+    console.log("marked "+text_to_replace);
+}
+
 // The main replacement algorithm
 function replace(dict){
     // console.log("Dictionary has " + dict.length + " entries");
@@ -11,9 +16,19 @@ function replace(dict){
             if (node.nodeType === Node.TEXT_NODE) {
                 const text = node.nodeValue;
                 let replacedText = text;
+                var text_to_replace;
                 for (const candidate in dict){
+                    // regex magic (currently looks for candidate+es, candidate+s, candidate)
                     const re = new RegExp("\\b"+candidate+"es\\b|\\b"+candidate+"s\\b|\\b"+candidate+"\\b","gi");
+                    // replaces all instances of candidate with translation in one line
                     replacedText = replacedText.replace(re, dict[candidate]);
+                    // gets each instance of candidate and marks it for mouse over
+                    do{
+                        text_to_replace = re.exec(text);
+                        if (text_to_replace){
+                            mark_word(dict, text_to_replace);
+                        }
+                    } while (text_to_replace);
                 }
                 if (replacedText !== text) {
                     element.replaceChild(document.createTextNode(replacedText), node);
