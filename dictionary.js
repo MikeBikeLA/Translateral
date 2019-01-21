@@ -34,7 +34,12 @@ function array_to_dict(array) {
 				continue;
 			}
 			// add each english word and it's translation to the dict
+			// TODO: semicolon parsing
 			dict[array[i][english_col]] = array[i][trans_col];
+			// TODO: improve plural handling
+			// basic plural handling, just add s and es to the dict
+			dict[array[i][english_col]+"es"] = array[i][trans_col];
+			dict[array[i][english_col]+"s"] = array[i][trans_col];
 		}
 		console.log("Constructed dict (" + Object.keys(dict).length + " entries)");
 		save_dict(dict);
