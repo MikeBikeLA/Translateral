@@ -1,3 +1,32 @@
+var def_window_open = false;
+
+// Translation word mouse over behavior
+function mouse_over(event){
+    if (!def_window_open){
+        var x = event.clientX;
+        var y = event.clientY;
+        console.log("x: "+x+" y: "+y);
+        def_window_open = true;
+    }
+}
+
+// Translation word mouse out behavior
+function mouse_out(event){
+    def_window_open = false;
+    console.log("mouse_out");
+}
+
+// Returns a node for the translation
+// trans_text: translation of the candidate word
+function create_trans(trans_text){
+    const trans = document.createElement("SPAN");
+    trans.setAttribute("class", "translation");
+    trans.innerText = trans_text;
+    trans.onmousemove = mouse_over;
+    trans.onmouseout = mouse_out;
+    return trans;
+}
+
 // Helper function to insert a node after another one
 function insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
@@ -28,22 +57,13 @@ function process_words(dict, node, element){
         if (find_first_word(dict, words) !== null){
             node.nodeValue = ""; // clear everything, we will construct node from anew
         }
-        // console.log("node:");
-        // console.log(node);
-        // console.log("nodeValue:");
-        // console.log(node.nodeValue)
-        // recurse_process_word(dict, words, 0, text, element, node); // O(n)
         var after = text; // text we have yet to go through
         for (const word of words){
-            // var before = node; // everything before this word, may include prior translation elements
             if (word in dict){
                 // candidate found
-                // console.log("found: " + word);
                 var before_and_after = after.split(word); // split the text using word as delimiter
                 const before = document.createTextNode(before_and_after[0]);
                 result_nodes.push(before);
-                // node.nodeValue += before_and_after[0]; // append stuff before this word to nodeValue
-                // console.log(before_and_after[0]);
                 before_and_after.shift(); // removes first element of the array
                 after = ""; // clear out the old text
                 for (let i = 0; i < before_and_after.length; i++){
@@ -53,16 +73,9 @@ function process_words(dict, node, element){
                     }
                     after += before_and_after[i];
                 }
-                // console.log("after: " + after);
-                const trans = document.createElement("SPAN");
-                trans.setAttribute("class", "translation");
-                trans.innerHTML = dict[word];
-                result_nodes.push(trans);
-                // element.insertAdjacentHTML('afterbegin', '<span class="translation">'+dict[word]+'</span>');
-                // insertAfter(trans, node);
+                result_nodes.push(create_trans(dict[word]));
             }
         }
-        // console.log(result_nodes);
     }
     return result_nodes;
 }
@@ -74,16 +87,13 @@ function replace(dict){
     const elements = document.getElementsByTagName('*');
     for (let i = 0; i < elements.length; i++) {
         var element = elements[i];
-        // skip elements with these tags
+        // skip/ignore elements with these tags
         switch(element.tagName){
             case "HEAD":
-                // console.log("found <head>");
-                // continue;
+            case "TITLE":
+            case "CODE":
             case "SCRIPT":
-                // console.log("found <script>");
-                // continue;
             case "STYLE":
-                // console.log("found <style>");
                 continue;
         }
         for (let j = 0; j < element.childNodes.length; j++) {
@@ -144,12 +154,38 @@ function retrieve_dict(){
 // Inject the definition popup window into the page (styles.css #def_window)
 function create_def_window(){
     // create the def_window div
+    // <div>
+    //     <h2>占位符</h2><b>reading</b><br>
+    //     <i>Original text:</i><p>placeholder</p>
+    // </div>
     const def_window = document.createElement("DIV"); // <div>
     def_window.setAttribute("id", "def_window");
-    // add child paragraphs to def_window
-    const headword = document.createElement("P"); // <p>
+    // headword: the translated vocabulary
+    const headword = document.createElement("H2"); // <h2>
     const hw_text = document.createTextNode("占位符"); // placeholder
-    headword.appendChild(hw_text); // between <p> and </p>
+    headword.setAttribute("id", "hw_text");
+    headword.appendChild(hw_text); // between <h2> and </h2>
+    def_window.appendChild(headword);
+    // reading: pinyin, romaji, etc.
+    const reading = document.createElement("B"); // <b>
+    const reading_text = document.createTextNode("pinyin");
+    reading.setAttribute("id", "reading_text");
+    reading.appendChild(reading_text);
+    def_window.appendChild(reading);
+    // line break
+    const br0 = document.createElement("BR");
+    def_window.appendChild(br0);
+    // orig_caption: Static caption that says "Original text:" in italics
+    const orig_caption = document.createElement("I");
+    const orig_caption_text = document.createTextNode("Original text: ");
+    orig_caption.appendChild(orig_caption_text);
+    def_window.appendChild(orig_caption);
+    // original: English candidate word that was translated
+    const original = document.createElement("P");
+    const orig_text = document.createTextNode("placeholder");
+    original.setAttribute("id", "orig_text");
+    original.appendChild(orig_text);
+    def_window.appendChild(original);
 
     document.body.appendChild(def_window);
     console.log("def_window created");
@@ -158,21 +194,3 @@ function create_def_window(){
 // Retrieve the dict from chrome.storage and do the replacement
 retrieve_dict();
 create_def_window();
-
-// This function will be called upon user mousing over the element
-function mouse_over(element){
-    console.log("mouse_over called");
-    const def_window = document.getElementById("def_window");
-    if (!def_window){
-        console.log("def_window was not found in the page!");
-        return;
-    }
-    // get location of mouse cursor
-    // update the def_window information
-    // make def_window visible
-}
-
-// This function will be called upon user mousing out of the element
-function mouse_out(){
-    // make def_window not visible
-}
