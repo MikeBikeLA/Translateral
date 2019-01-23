@@ -1,21 +1,6 @@
-// Recursive function that takes in the next word to look for
-function recurse_process_word(dict, words, index, text, element){
-    if (index == words.length){
-        return text;
-    }
-    var new_text = text; // if we find a word to replace, everything to the left of it will be trimmed
-    const word = words[index];
-    if (words[index] in dict){
-        // candidate found
-        var before_and_after = new_text.split(words[index]);
-        element.insertAdjacentHTML('beforeend', before_and_after[0]);
-        new_text = before_and_after[1]; // keep stuff to the right of text
-        // var trans = document.createElement("SPAN");
-        // trans.setAttribute("class", "translation");
-        // trans.innerHTML = dict[word];
-        element.insertAdjacentHTML('afterend', '<span class="translation">'+dict[word]+'字</span>');
-    }
-    return recurse_process_word(dict, words, index+1, new_text, element);
+// Helper function to insert a node after another one
+function insertAfter(newNode, referenceNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
 // returns the first candidate word in words
@@ -25,6 +10,7 @@ function find_first_word(dict, words){
             return word;
         }
     }
+    return null;
 }
 
 // This function will take in a text node, find words to replace,
@@ -36,44 +22,49 @@ function process_words(dict, node, element){
     const text = node.nodeValue;
     // split text up into words
     const words = text.match(/[a-z'\-]+/gi);
+    var result_nodes = []; // we will construct our result by pushing result nodes to this array
     if (words != null){
         // console.log("processing "+text);
-        // delete everything to the right of the first candidate word
-        // i.e. we start appending from the first candidate world
-        node.nodeValue = text.split(find_first_word(dict, words))[0]; // O(n)
+        if (find_first_word(dict, words) !== null){
+            node.nodeValue = ""; // clear everything, we will construct node from anew
+        }
         // console.log("node:");
         // console.log(node);
         // console.log("nodeValue:");
         // console.log(node.nodeValue)
-        recurse_process_word(dict, words, 0, text, element); // O(n)
-        // for (const word of words){
-        //     if (word in dict){
-        //         node.nodeValue = ""; // empty out the nodeValue as we will reconstruct it
-        //         var trans_wrapper = document.createElement("SPAN"); // will contain the below 3 spans
-        //         var split_text = text.split(word); // everything before the word and everything after the word
-        //         var pre_trans = document.createElement("SPAN");
-        //         pre_trans.innerHTML = split_text[0];
-        //         var post_trans = document.createElement("SPAN");
-        //         post_trans.innerHTML = split_text[1];
-        //         var trans = document.createElement("SPAN");
-        //         trans.setAttribute("class", "translation");
-        //         trans.innerHTML = dict[word];
-
-        //         trans_wrapper.appendChild(pre_trans);
-        //         trans_wrapper.appendChild(trans);
-        //         trans_wrapper.appendChild(post_trans);
-        //         element.replaceChild(trans_wrapper, node);
-        //         // Replace 'word' with '<span class="translation">字</span>'
-        //         // var element = $('<span>');
-        //         // $(element).attr('class', 'translation');
-        //         // $(element).html(dict[word]);
-
-        //         console.log("node: " + node);
-        //         // add mouse over functionality
-        //     }
-        // }
+        // recurse_process_word(dict, words, 0, text, element, node); // O(n)
+        var after = text; // text we have yet to go through
+        for (const word of words){
+            // var before = node; // everything before this word, may include prior translation elements
+            if (word in dict){
+                // candidate found
+                // console.log("found: " + word);
+                var before_and_after = after.split(word); // split the text using word as delimiter
+                const before = document.createTextNode(before_and_after[0]);
+                result_nodes.push(before);
+                // node.nodeValue += before_and_after[0]; // append stuff before this word to nodeValue
+                // console.log(before_and_after[0]);
+                before_and_after.shift(); // removes first element of the array
+                after = ""; // clear out the old text
+                for (let i = 0; i < before_and_after.length; i++){
+                    // if there's multiple instances of this candidate in words, split() would've cut them out
+                    if (i != 0){
+                        after += word; // add the word back in
+                    }
+                    after += before_and_after[i];
+                }
+                // console.log("after: " + after);
+                const trans = document.createElement("SPAN");
+                trans.setAttribute("class", "translation");
+                trans.innerHTML = dict[word];
+                result_nodes.push(trans);
+                // element.insertAdjacentHTML('afterbegin', '<span class="translation">'+dict[word]+'</span>');
+                // insertAfter(trans, node);
+            }
+        }
+        // console.log(result_nodes);
     }
-    return node.nodeValue;
+    return result_nodes;
 }
 
 // The main replacement algorithm
@@ -100,11 +91,22 @@ function replace(dict){
 
             if (node.nodeType === Node.TEXT_NODE) {
                 // console.log(text);
-                var replacedText;
+                // var replacedText;
                 // split text into array of words
-                console.log("element:");
-                console.log(element);
-                replacedText = process_words(dict, node, element);
+                // console.log("element:");
+                // console.log(element);
+                var result_nodes = process_words(dict, node, element);
+                if (result_node = result_nodes.shift()){ // this assignment inside conditional is intentional
+                    var previous = result_node;
+                    element.replaceChild(result_node, node); // first element of result_nodes
+                    // console.log("original node replaced with: "+result_node.nodeValue);
+                    while (result_node = result_nodes.shift()){
+                        // insertAfter or append
+                        insertAfter(result_node, previous);
+                        previous = result_node;
+                        // console.log("appended: " + result_node);
+                    }
+                }
                 // element.replaceChild(document.createTextNode(replacedText), node);
                 // node.nodeValue = replacedText;
                 // for (const candidate in dict){
