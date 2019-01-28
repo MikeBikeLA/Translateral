@@ -9,13 +9,13 @@ function toggle_def_window(x, y, target){
         def_window.style.left = x+"px";
         def_window.style.top = y+"px";
         def_window.style.visibility = "visible";
-        def_window_open = true;
         hw_text = document.getElementById("hw_text");
         hw_text.innerText = target.innerText+" "; // add a space after the headword
         orig_text = document.getElementById("orig_text");
         orig_text.innerText = target.getAttribute("data-orig");
         reading = document.getElementById("reading_text");
         // reading.innerText = target.getAttribute("data-reading");
+        def_window_open = true;
     }
     else{
         // close if mouse isn't over the def_window
@@ -27,8 +27,13 @@ function toggle_def_window(x, y, target){
 
 // Translation word mouse over behavior
 function mouse_over(event){
+    if (event.target == undefined)
+        return;
     if (!def_window_open){
-        toggle_def_window(event.clientX, event.clientY, event.target);
+        var target = event.target;
+        var domRect = target.getBoundingClientRect();
+        toggle_def_window(domRect.right, domRect.bottom, event.target);
+        // toggle_def_window(event.clientX, event.clientY, event.target);
     }
 }
 

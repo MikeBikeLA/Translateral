@@ -55,6 +55,7 @@ body, html {
 .translation{
   text-decoration: underline;
   text-decoration-style: dotted;
+  white-space:nowrap;
 }
 .orig_text{
   visibility: hidden;
