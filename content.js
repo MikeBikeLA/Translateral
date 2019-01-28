@@ -1,19 +1,36 @@
+var def_window; // global var populated by create_def_window
 var def_window_open = false;
+
+// Toggles def window open/closed
+function toggle_def_window(x, y){
+    if (!def_window_open){
+        // open
+        // console.log("opening def_window");
+        def_window.style.left = x+"px";
+        def_window.style.top = y+"px";
+        def_window.style.visibility = "visible";
+        def_window_open = true;
+        hw_text = document.getElementById("hw_text");
+    }
+    else{
+        // close if mouse isn't over the def_window
+        // console.log("closing def_window");
+        def_window_open = false;
+        def_window.style.visibility = "hidden";
+    }
+}
 
 // Translation word mouse over behavior
 function mouse_over(event){
     if (!def_window_open){
-        var x = event.clientX;
-        var y = event.clientY;
-        console.log("x: "+x+" y: "+y);
-        def_window_open = true;
+        toggle_def_window(event.clientX, event.clientY);
     }
 }
 
 // Translation word mouse out behavior
 function mouse_out(event){
-    def_window_open = false;
-    console.log("mouse_out");
+    toggle_def_window();
+    // console.log("mouse_out");
 }
 
 // Returns a node for the translation
@@ -23,7 +40,7 @@ function create_trans(trans_text){
     trans.setAttribute("class", "translation");
     trans.innerText = trans_text;
     trans.onmousemove = mouse_over;
-    trans.onmouseout = mouse_out;
+    trans.onmouseleave = mouse_out;
     return trans;
 }
 
@@ -133,7 +150,7 @@ function create_def_window(){
     //     <h2>占位符</h2><b>reading</b><br>
     //     <i>Original text:</i><p>placeholder</p>
     // </div>
-    const def_window = document.createElement("DIV"); // <div>
+    def_window = document.createElement("DIV"); // <div>
     def_window.setAttribute("id", "def_window");
     // headword: the translated vocabulary
     const headword = document.createElement("H2"); // <h2>

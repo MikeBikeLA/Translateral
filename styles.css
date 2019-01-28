@@ -26,8 +26,13 @@ body, html {
   opacity: 1 !important;
 }
 #def_window{
-  background-color:black;
-  visibility:hidden;
+  background-color: #ffd1dc;
+  visibility: hidden;
+  position: fixed;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  outline: 2px solid black;
 }
 .translation{
   text-decoration: underline;
