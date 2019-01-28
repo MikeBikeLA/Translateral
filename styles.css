@@ -30,6 +30,7 @@ body, html {
   visibility: hidden;
   position: fixed;
   padding-top: 10px;
+  padding-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px;
   outline: 2px solid black;
@@ -37,6 +38,7 @@ body, html {
 .def_window h2{
   font-family: Arial;
   color: black;
+  display: inline;
 }
 .def_window b{
   font-family: Arial;
@@ -46,13 +48,16 @@ body, html {
   font-family: Arial;
   color: black;
 }
-.def_window p{
+.def_window span{
   font-family: Arial;
   color: black;
 }
 .translation{
   text-decoration: underline;
   text-decoration-style: dotted;
+}
+.orig_text{
+  visibility: hidden;
 }
 
 /* The switch - the box around the slider */

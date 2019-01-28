@@ -11,9 +11,11 @@ function toggle_def_window(x, y, target){
         def_window.style.visibility = "visible";
         def_window_open = true;
         hw_text = document.getElementById("hw_text");
-        hw_text.innerText = target.innerText;
+        hw_text.innerText = target.innerText+" "; // add a space after the headword
         orig_text = document.getElementById("orig_text");
-        // orig_text.innerText = document.getElementById("orig_"+target.innerText).innerText;
+        orig_text.innerText = target.getAttribute("data-orig");
+        reading = document.getElementById("reading_text");
+        // reading.innerText = target.getAttribute("data-reading");
     }
     else{
         // close if mouse isn't over the def_window
@@ -44,15 +46,8 @@ function create_trans(orig_text, trans_text){
     trans.innerText = trans_text;
     trans.onmousemove = mouse_over;
     trans.onmouseleave = mouse_out;
-    // add the original text as an 'invisible' Element (won't show up on document)
-    // only one per instance is needed
-    // var orig = document.getElementById("orig_"+trans_text);
-    // if (orig === null){
-    //     orig = document.createElement(orig_text);
-    //     orig.setAttribute("id", "orig_"+trans_text); // accessed by def_window
-    //     orig.innerText = orig_text;
-    // }
-    // trans.appendChild(orig);
+    trans.setAttribute("data-orig", orig_text);
+    // trans.setAttribute("data-reading", reading_text);
     return trans;
 }
 
@@ -177,21 +172,20 @@ function create_def_window(){
     reading.setAttribute("id", "reading_text");
     reading.appendChild(reading_text);
     def_window.appendChild(reading);
-    // line break
-    const br0 = document.createElement("BR");
-    def_window.appendChild(br0);
+    // wrap the following in a div
+    const orig_div = document.createElement("DIV");
     // orig_caption: Static caption that says "Original text:" in italics
     const orig_caption = document.createElement("I");
     const orig_caption_text = document.createTextNode("Original text: ");
     orig_caption.appendChild(orig_caption_text);
-    def_window.appendChild(orig_caption);
+    orig_div.appendChild(orig_caption);
     // original: English candidate word that was translated
-    const original = document.createElement("P");
+    const original = document.createElement("SPAN");
     const orig_text = document.createTextNode("placeholder");
     original.setAttribute("id", "orig_text");
     original.appendChild(orig_text);
-    def_window.appendChild(original);
-
+    orig_div.appendChild(original);
+    def_window.appendChild(orig_div);
     document.body.appendChild(def_window);
     console.log("def_window created");
 }
