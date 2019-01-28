@@ -25,7 +25,7 @@ body, html {
 .accordion .card-body {
   opacity: 1 !important;
 }
-#def_window{
+.def_window{
   background-color: #ffd1dc;
   visibility: hidden;
   position: fixed;
@@ -33,6 +33,22 @@ body, html {
   padding-left: 10px;
   padding-right: 10px;
   outline: 2px solid black;
+}
+.def_window h2{
+  font-family: Arial;
+  color: black;
+}
+.def_window b{
+  font-family: Arial;
+  color: black;
+}
+.def_window i{
+  font-family: Arial;
+  color: black;
+}
+.def_window p{
+  font-family: Arial;
+  color: black;
 }
 .translation{
   text-decoration: underline;

@@ -2,7 +2,7 @@ var def_window; // global var populated by create_def_window
 var def_window_open = false;
 
 // Toggles def window open/closed
-function toggle_def_window(x, y){
+function toggle_def_window(x, y, target){
     if (!def_window_open){
         // open
         // console.log("opening def_window");
@@ -11,6 +11,9 @@ function toggle_def_window(x, y){
         def_window.style.visibility = "visible";
         def_window_open = true;
         hw_text = document.getElementById("hw_text");
+        hw_text.innerText = target.innerText;
+        orig_text = document.getElementById("orig_text");
+        // orig_text.innerText = document.getElementById("orig_"+target.innerText).innerText;
     }
     else{
         // close if mouse isn't over the def_window
@@ -23,7 +26,7 @@ function toggle_def_window(x, y){
 // Translation word mouse over behavior
 function mouse_over(event){
     if (!def_window_open){
-        toggle_def_window(event.clientX, event.clientY);
+        toggle_def_window(event.clientX, event.clientY, event.target);
     }
 }
 
@@ -35,12 +38,21 @@ function mouse_out(event){
 
 // Returns a node for the translation
 // trans_text: translation of the candidate word
-function create_trans(trans_text){
+function create_trans(orig_text, trans_text){
     const trans = document.createElement("SPAN");
     trans.setAttribute("class", "translation");
     trans.innerText = trans_text;
     trans.onmousemove = mouse_over;
     trans.onmouseleave = mouse_out;
+    // add the original text as an 'invisible' Element (won't show up on document)
+    // only one per instance is needed
+    // var orig = document.getElementById("orig_"+trans_text);
+    // if (orig === null){
+    //     orig = document.createElement(orig_text);
+    //     orig.setAttribute("id", "orig_"+trans_text); // accessed by def_window
+    //     orig.innerText = orig_text;
+    // }
+    // trans.appendChild(orig);
     return trans;
 }
 
@@ -88,7 +100,7 @@ function process_words(dict, node, element){
                     }
                     after_text += before_and_after[i];
                 }
-                result_nodes.push(create_trans(dict[word]));
+                result_nodes.push(create_trans(word, dict[word]));
             }
         }
         const after = document.createTextNode(after_text); // node version of after_text
@@ -152,6 +164,7 @@ function create_def_window(){
     // </div>
     def_window = document.createElement("DIV"); // <div>
     def_window.setAttribute("id", "def_window");
+    def_window.setAttribute("class", "def_window");
     // headword: the translated vocabulary
     const headword = document.createElement("H2"); // <h2>
     const hw_text = document.createTextNode("占位符"); // placeholder
