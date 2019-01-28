@@ -47,42 +47,41 @@ function find_first_word(dict, words){
 // dict: dictionary object
 // node: the node that contains the text we wish to replace
 // element: the element that has node as its child (for recurse_process_word)
+// returns the result nodes
 function process_words(dict, node, element){
     const text = node.nodeValue;
     // split text up into words
     const words = text.match(/[a-z'\-]+/gi);
     var result_nodes = []; // we will construct our result by pushing result nodes to this array
-    if (words != null){
-        // console.log("processing "+text);
-        if (find_first_word(dict, words) !== null){
-            node.nodeValue = ""; // clear everything, we will construct node from anew
-        }
-        var after = text; // text we have yet to go through
+    if (words != null && find_first_word(dict, words) !== null){
+        node.nodeValue = ""; // clear everything, we will construct node from anew
+        var after_text = text; // text we have yet to go through
         for (const word of words){
             if (word in dict){
                 // candidate found
-                var before_and_after = after.split(word); // split the text using word as delimiter
+                var before_and_after = after_text.split(word); // split the text using word as delimiter
                 const before = document.createTextNode(before_and_after[0]);
                 result_nodes.push(before);
                 before_and_after.shift(); // removes first element of the array
-                after = ""; // clear out the old text
+                after_text = ""; // clear out the old text
                 for (let i = 0; i < before_and_after.length; i++){
                     // if there's multiple instances of this candidate in words, split() would've cut them out
                     if (i != 0){
-                        after += word; // add the word back in
+                        after_text += word; // add the word back in
                     }
-                    after += before_and_after[i];
+                    after_text += before_and_after[i];
                 }
                 result_nodes.push(create_trans(dict[word]));
             }
         }
+        const after = document.createTextNode(after_text); // node version of after_text
+        result_nodes.push(after);
     }
     return result_nodes;
 }
 
 // The main replacement algorithm
 function replace(dict){
-    // console.log("Dictionary has " + dict.length + " entries");
     console.log("Starting replacement algorithm");
     const elements = document.getElementsByTagName('*');
     for (let i = 0; i < elements.length; i++) {
@@ -100,41 +99,17 @@ function replace(dict){
             const node = element.childNodes[j];
 
             if (node.nodeType === Node.TEXT_NODE) {
-                // console.log(text);
-                // var replacedText;
-                // split text into array of words
-                // console.log("element:");
-                // console.log(element);
+                // split text into separate nodes
                 var result_nodes = process_words(dict, node, element);
                 if (result_node = result_nodes.shift()){ // this assignment inside conditional is intentional
                     var previous = result_node;
                     element.replaceChild(result_node, node); // first element of result_nodes
-                    // console.log("original node replaced with: "+result_node.nodeValue);
                     while (result_node = result_nodes.shift()){
                         // insertAfter or append
                         insertAfter(result_node, previous);
                         previous = result_node;
-                        // console.log("appended: " + result_node);
                     }
                 }
-                // element.replaceChild(document.createTextNode(replacedText), node);
-                // node.nodeValue = replacedText;
-                // for (const candidate in dict){
-                //     // regex magic (currently looks for candidate+es, candidate+s, candidate)
-                //     const re = new RegExp("\\b"+candidate+"es\\b|\\b"+candidate+"s\\b|\\b"+candidate+"\\b","gi");
-                //     // replaces all instances of candidate with translation in one line
-                //     replacedText = replacedText.replace(re, dict[candidate]);
-                //     // gets each instance of candidate and marks it for mouse over
-                //     // do{
-                //     //     text_to_replace = re.exec(text);
-                //     //     if (text_to_replace){
-                //     //         mark_word(dict, text_to_replace);
-                //     //     }
-                //     // } while (text_to_replace);
-                // }
-                // if (replacedText !== text) {
-                //     element.replaceChild(document.createTextNode(replacedText), node);
-                // }
             }
             
         }
