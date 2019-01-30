@@ -7,6 +7,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="newtab.css">
     <title>SAT</title>
   </head>
 
@@ -56,48 +57,47 @@
           <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
             <div class="card-body">
 
-              <div class="container">
-                <div class="row">
-                  <div class="col-sm">
-                    <label class="switch">
-                      <input type="checkbox">
-                      <span class="slider"></span>
-                    </label>
+              <!-- <div class="container">
+                <div class="row">                  
+                  <div class="col-sm-4">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <label class="switch">
+                              <input type="checkbox">
+                              <span class="slider"></span>
+                            </label>
+                          </div>
+                          <div class="col-sm-8">
+                            <span>LABEL 1</span>
+                          </div>
+                        </div>
                   </div>
-                  <div class="col-sm">
-                    <label class="switch">
-                      <input type="checkbox">
-                      <span class="slider"></span>
-                    </label>
+                  <div class="col-sm-4">
+                      <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                      </label>
                   </div>
-                  <div class="col-sm">
-                    <label class="switch">
-                      <input type="checkbox">
-                      <span class="slider"></span>
-                    </label>
-                  </div>
-                  <div class="col-sm">
-                    <label class="switch">
-                      <input type="checkbox">
-                      <span class="slider"></span>
-                    </label>
+                  <div class="col-sm-4">
+                      <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                      </label>
                   </div>
                 </div>
-              </div>
+              </div> -->
               
               <div class="container">
                 <div class="row">
                   <div class="col-sm">
-                    <label class="switch">
-                      <input type="checkbox">
-                      <span class="slider"></span>
-                    </label>
-                  </div>
-                  <div class="col-sm">
-                    <label class="switch">
-                      <input type="checkbox">
-                      <span class="slider"></span>
-                    </label>
+                      <div class="dropdown">
+                          <button id="dropdownID" class="dropbtn">Dropdown</button>
+                          <div id="myDropdown" class="dropdown-content">
+                            <a class="dropdown-language" href="#">Link 1</a>
+                            <a class="dropdown-language" href="#">Link 2</a>
+                            <a class="dropdown-language" href="#">Link 3</a>
+                          </div>
+                        </div>
                   </div>
                   <div class="col-sm">
                     <label class="switch">
@@ -113,6 +113,38 @@
                   </div>
                 </div>
               </div>
+
+              <br><br><br><br><br><br><br><br>
+
+              <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                        <div class="dropdown">
+                          <button id="dropdownID" class="dropbtn">Language</button>
+                          <select id="myDropdown" class="dropdown-content">
+                            <option href="#">Chinese (Simplified)</option>
+                            <a href="#">Chinese (Traditional)</a>
+                            <a href="#">Japanese</a>
+                          </select>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                      <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                      </label>
+                    </div>
+                    <div class="col-sm">
+                      <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+
+
 
             </div>
           </div>

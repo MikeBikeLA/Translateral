@@ -17,7 +17,10 @@
     "options_page": "options.html",
     "content_scripts": [
         {
-            "css": ["styles.css"],
+            "css": [
+                "styles.css",
+                "newtab.css"            
+            ],
             "matches": [
                 "http://*/*",
                 "https://*/*"
