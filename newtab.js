@@ -37,12 +37,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    var languageSelection = document.getElementgetElementByClassName('dropdown-language');
-    languageSelection.addEventListener('click', function() {
-        var selectedLanguage = languageSelection.innerHTML;
-        var selectedLanguage = '4';
-        document.getElementById("myDropdown").innerHTML = selectedLanguage;
-    });
+    var languageSelection = document.getElementsByClassName('dropdown-language');
+
+    for(let i = 0; i < languageSelection.length; i++) {
+        languageSelection[i].addEventListener("click", function() {
+            console.log("Clicked index: " + languageSelection[i].id);
+            var selectedLanguage = languageSelection[i].innerHTML;
+            document.getElementById("dropdownID").innerHTML = selectedLanguage;
+        });
+    };
 });
 
 load_new_tab();
