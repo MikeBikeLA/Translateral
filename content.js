@@ -8,6 +8,8 @@ function toggle_def_window(x, y, target){
         // console.log("opening def_window");
         def_window.style.left = x+"px";
         def_window.style.top = y+"px";
+        def_window.style.width = "auto";
+        def_window.style.height = "auto";
         def_window.style.visibility = "visible";
         hw_text = document.getElementById("hw_text");
         hw_text.innerText = target.innerText+" "; // add a space after the headword
@@ -22,13 +24,17 @@ function toggle_def_window(x, y, target){
         // console.log("closing def_window");
         def_window_open = false;
         def_window.style.visibility = "hidden";
+        def_window.style.width = "0%";
+        def_window.style.height = "0%";
     }
 }
 
 // Translation word mouse over behavior
 function mouse_over(event){
-    if (event.target == undefined)
+    if (event.target == undefined){
+        console.log("mouse over event had undefined target");
         return;
+    }
     if (!def_window_open){
         var target = event.target;
         var domRect = target.getBoundingClientRect();
@@ -83,12 +89,13 @@ function process_words(dict, node, element){
     const words = text.match(/[a-z'\-]+/gi);
     var result_nodes = []; // we will construct our result by pushing result nodes to this array
     if (words != null && find_first_word(dict, words) !== null){
+        // console.log(node.nodeValue);
         node.nodeValue = ""; // clear everything, we will construct node from anew
         var after_text = text; // text we have yet to go through
         for (const word of words){
             if (word in dict){
                 // candidate found
-                var before_and_after = after_text.split(word); // split the text using word as delimiter
+                var before_and_after = after_text.split(new RegExp("\\"+word+"\\b",'i')); // split the text using word as delimiter
                 const before = document.createTextNode(before_and_after[0]);
                 result_nodes.push(before);
                 before_and_after.shift(); // removes first element of the array
@@ -122,6 +129,21 @@ function replace(dict){
             case "CODE":
             case "SCRIPT":
             case "STYLE":
+            case "PRE":
+            case "BASE":
+            case "DATA":
+            case "RT":
+            case "RTC":
+            case "RUBY":
+            case "VAR":
+            case "TIME":
+            case "OBJECT":
+            case "PARAM":
+            case "SOURCE":
+            case "EMBED":
+            case "IFRAME":
+            case "CITE":
+            case "BLOCKQUOTE":
                 continue;
         }
         for (let j = 0; j < element.childNodes.length; j++) {
@@ -191,6 +213,9 @@ function create_def_window(){
     original.appendChild(orig_text);
     orig_div.appendChild(original);
     def_window.appendChild(orig_div);
+    def_window.style.visibility = "hidden";
+    def_window.style.width = "0%";
+    def_window.style.height = "0%";
     document.body.appendChild(def_window);
     console.log("def_window created");
 }
