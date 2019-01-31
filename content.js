@@ -95,7 +95,8 @@ function process_words(dict, node, element){
         for (const word of words){
             if (word in dict){
                 // candidate found
-                var before_and_after = after_text.split(new RegExp("\\"+word+"\\b",'i')); // split the text using word as delimiter
+                var before_and_after = after_text.split(new RegExp("\\b"+word+"\\b","i")); // split the text using word as delimiter
+                console.log(before_and_after);
                 const before = document.createTextNode(before_and_after[0]);
                 result_nodes.push(before);
                 before_and_after.shift(); // removes first element of the array
