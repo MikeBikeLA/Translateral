@@ -16,7 +16,7 @@ function toggle_def_window(x, y, target){
         orig_text = document.getElementById("orig_text");
         orig_text.innerText = target.getAttribute("data-orig");
         reading = document.getElementById("reading_text");
-        // reading.innerText = target.getAttribute("data-reading");
+        reading.innerText = target.getAttribute("data-reading");
         def_window_open = true;
     }
     else{
@@ -51,14 +51,14 @@ function mouse_out(event){
 
 // Returns a node for the translation
 // trans_text: translation of the candidate word
-function create_trans(orig_text, trans_text){
+function create_trans(orig_text, trans_text, reading_text){
     const trans = document.createElement("SPAN");
     trans.setAttribute("class", "translation");
     trans.innerText = trans_text;
     trans.onmousemove = mouse_over;
     trans.onmouseleave = mouse_out;
     trans.setAttribute("data-orig", orig_text);
-    // trans.setAttribute("data-reading", reading_text);
+    trans.setAttribute("data-reading", reading_text);
     return trans;
 }
 
@@ -108,7 +108,7 @@ function process_words(dict, node, element){
                     }
                     after_text += before_and_after[i];
                 }
-                result_nodes.push(create_trans(word, dict[word]));
+                result_nodes.push(create_trans(word, dict[word]["trans"], dict[word]["reading"]));
             }
         }
         const after = document.createTextNode(after_text); // node version of after_text
@@ -172,7 +172,7 @@ function replace(dict){
 // Since this content.js file will run from the start each time a new page
 // is loaded, we need to retrieve_dict from chrome.storage each time
 function retrieve_dict(){
-    chrome.storage.sync.get("dict", function(dict_wrapper) {
+    chrome.storage.local.get("dict", function(dict_wrapper) {
         console.log("dict retrieved: " + Object.keys(dict_wrapper.dict).length + " entries")
         replace(dict_wrapper.dict);
      });

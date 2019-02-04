@@ -1,7 +1,7 @@
 // Saves the dict to chrome.storage
 // Called when chrome.storage.sync.get() is called asynchronously
 function save_dict(dict){
-	chrome.storage.sync.set({"dict": dict});
+	chrome.storage.local.set({"dict": dict});
 	console.log("saved dict (" + Object.keys(dict).length + " entries) to chrome.storage");
 }
 
@@ -28,6 +28,8 @@ function array_to_dict(array) {
 					if (array[i][j] == locale){
 						var trans_col = j;
 						console.log("Found " + locale + " in column " + trans_col);
+						var reading_col = ++j;
+						console.log("Using next column as reading:" + array[i][j]);
 						break;
 					}
 				}
@@ -35,11 +37,17 @@ function array_to_dict(array) {
 			}
 			// add each english word and it's translation to the dict
 			// TODO: semicolon parsing
-			dict[array[i][english_col]] = array[i][trans_col];
-			// TODO: improve plural handling
-			// basic plural handling, just add s and es to the dict
-			dict[array[i][english_col]+"es"] = array[i][trans_col];
-			dict[array[i][english_col]+"s"] = array[i][trans_col];
+			const words = array[i][english_col].split(';');
+			for (const word of words){
+				dict[word] = { "trans": array[i][trans_col],
+							   "reading": array[i][reading_col] };
+				// TODO: improve plural handling
+				// basic plural handling, just add s and es to the dict
+				dict[word+"es"] = { "trans": array[i][trans_col],
+							   		"reading": array[i][reading_col] };
+			    dict[word+"s"] = { "trans": array[i][trans_col],
+							   	   "reading": array[i][reading_col] };
+			}
 		}
 		console.log("Constructed dict (" + Object.keys(dict).length + " entries)");
 		save_dict(dict);
