@@ -18,8 +18,7 @@
     "content_scripts": [
         {
             "css": [
-                "styles.css",
-                "newtab.css"            
+                "styles.css"          
             ],
             "matches": [
                 "http://*/*",
