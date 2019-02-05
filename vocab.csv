@@ -1,5 +1,5 @@
-tags,en_US,zh_CN,CN_py,zh_TW,TW_py,ja_JP,JP_ro,ko_KR,KR_ro
-countries,United States of America;United States;America,美国,měiguó,美國,měiguó,,,,
+﻿tags,en_US,zh_CN,CN_py,zh_TW,TW_py,ja_JP,JP_ro,ko_KR,KR_ro
+countries,America;United States;United States of America,美国,měiguó,美國,měiguó,,,,
 countries,France,法国,fǎguó,法國,fàguó,,,,
 countries,Germany,德国,déguó,德國,déguó,,,,
 countries,Spain,西班牙,xībānyá,西班牙,xībānyá,,,,
@@ -8,7 +8,7 @@ countries,Switzerland,瑞士,ruìshì,瑞士,ruìshì,,,,
 countries,Norway,挪威,nuówēi,挪威,nuówēi,,,,
 countries,Japan,日本,rìběn,日本,rìběn,,,,
 countries,North Korea,北韩,běihán,北韓,běihán,,,,
-countries,South Korea;Korea,韩国,hánguó,韓國,hánguó,,,,
+countries,Korea;South Korea,韩国,hánguó,韓國,hánguó,,,,
 countries,Mexico,墨西哥,mòxīgē,墨西哥,mòxīgē,,,,
 countries,Canada,加拿大,jiānádà,加拿大,jiānádà,,,,
 countries,United Kingdom;U.K.;UK,英国,yīngguó,英國,yīngguó,,,,
