@@ -93,6 +93,8 @@ function process_words(dict, node, element){
         node.nodeValue = ""; // clear everything, we will construct node from anew
         var after_text = text; // text we have yet to go through
         for (const word of words){
+            var regex = new RegExp("\\b"+word+"\\b|\\b"+word+"s\\b|\\b"+word+"es\\b","i");
+            // todo: instead of having pluras in the dictionary, do the plural detection here
             if (word in dict){
                 // candidate found
                 var before_and_after = after_text.split(new RegExp("\\b"+word+"\\b","i")); // split the text using word as delimiter
