@@ -2,6 +2,7 @@
   background-color: #ffd1dc;
   visibility: hidden;
   position: fixed;
+  z-index: 1000;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 10px;
