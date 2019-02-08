@@ -1,5 +1,4 @@
-// Saves the dict to chrome.storage
-// Called when chrome.storage.sync.get() is called asynchronously
+// Saves the language-specific master dict to chrome.storage.local
 function save_dict(dict){
 	chrome.storage.local.set({"dict": dict});
 	console.log("saved dict (" + Object.keys(dict).length + " entries) to chrome.storage");
@@ -43,10 +42,10 @@ function array_to_dict(array) {
 							   "reading": array[i][reading_col] };
 				// TODO: improve plural handling
 				// basic plural handling, just add s and es to the dict
-				dict[word+"es"] = { "trans": array[i][trans_col],
-							   		"reading": array[i][reading_col] };
-			    dict[word+"s"] = { "trans": array[i][trans_col],
-							   	   "reading": array[i][reading_col] };
+				// dict[word+"es"] = { "trans": array[i][trans_col],
+				// 			   		"reading": array[i][reading_col] };
+			 	// dict[word+"s"] = { "trans": array[i][trans_col],
+				// 			   	   "reading": array[i][reading_col] };
 			}
 		}
 		console.log("Constructed dict (" + Object.keys(dict).length + " entries)");
@@ -75,7 +74,7 @@ function csv_to_array(text) {
     array_to_dict(ret);
 }
 
-// Loads the dictionary into chrome.storage
+// Main function: Loads the master dictionary into chrome.storage
 function load_dict(){
 	console.log("Fetching vocab.csv from Github");
 	fetch('https://raw.githubusercontent.com/MikeBikeLA/Translateral/master/vocab.csv')

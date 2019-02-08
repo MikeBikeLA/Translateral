@@ -25,6 +25,7 @@
                 "https://*/*"
             ],
             "js": [
+                "user_selected.js",
                 "content.js"
             ],
             "run_at": "document_end"

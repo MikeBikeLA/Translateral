@@ -80,10 +80,11 @@ function find_first_word(dict, words){
 // This function will take in a text node, find words to replace,
 // and then replace those words with <div>
 // dict: dictionary object
+// us: the user_selected Set
 // node: the node that contains the text we wish to replace
-// element: the element that has node as its child (for recurse_process_word)
+// element: the element that has node as its child
 // returns the result nodes
-function process_words(dict, node, element){
+function process_words(dict, us, node, element){
     const text = node.nodeValue;
     // split text up into words
     const words = text.match(/[a-z'\-]+/gi);
@@ -94,8 +95,9 @@ function process_words(dict, node, element){
         var after_text = text; // text we have yet to go through
         for (const word of words){
             var regex = new RegExp("\\b"+word+"\\b|\\b"+word+"s\\b|\\b"+word+"es\\b","i");
-            // todo: instead of having pluras in the dictionary, do the plural detection here
-            if (word in dict){
+            // todo: instead of having plurals in the dictionary, do the plural detection here
+            // if (word in dict){
+            if (word in us){
                 // candidate found
                 var before_and_after = after_text.split(new RegExp("\\b"+word+"\\b","i")); // split the text using word as delimiter
                 // console.log(before_and_after);
@@ -120,7 +122,7 @@ function process_words(dict, node, element){
 }
 
 // The main replacement algorithm
-function replace(dict){
+function replace(dict, us){
     console.log("Starting replacement algorithm");
     const elements = document.getElementsByTagName('*');
     for (let i = 0; i < elements.length; i++) {
@@ -154,7 +156,7 @@ function replace(dict){
 
             if (node.nodeType === Node.TEXT_NODE) {
                 // split text into separate nodes
-                var result_nodes = process_words(dict, node, element);
+                var result_nodes = process_words(dict, us, node, element);
                 if (result_node = result_nodes.shift()){ // this assignment inside conditional is intentional
                     var previous = result_node;
                     element.replaceChild(result_node, node); // first element of result_nodes
@@ -175,8 +177,18 @@ function replace(dict){
 // is loaded, we need to retrieve_dict from chrome.storage each time
 function retrieve_dict(){
     chrome.storage.local.get("dict", function(dict_wrapper) {
-        console.log("dict retrieved: " + Object.keys(dict_wrapper.dict).length + " entries")
-        replace(dict_wrapper.dict);
+        console.log("dict retrieved: " + Object.keys(dict_wrapper.dict).length + " entries");
+        // replace(dict_wrapper.dict);
+        chrome.storage.sync.get("user_selected", function(user_selected_wrapper){
+            if (!user_selected_wrapper.user_selected.size){
+                // no words selected, so show all of them
+                console.log("us does not exist, defaulting to dict");
+                replace(dict_wrapper.dict, dict_wrapper.dict);
+                return;
+            }
+            console.log("us retrieved: " + user_selected_wrapper.user_selected.size + " entries");
+            replace(dict_wrapper.dict, user_selected_wrapper.user_selected);
+        })
      });
 }
 
