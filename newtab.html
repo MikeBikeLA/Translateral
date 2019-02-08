@@ -32,7 +32,8 @@
       </div>
 
       <div class="accordion" id="accordionExample">
-        <div class="card">
+
+        <div class="card" id="flipped-word-tab">
           <div class="card-header" id="headingOne">
             <h2 class="mb-0">
               <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -42,10 +43,19 @@
           </div>    
           <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
             <div class="card-body">
-              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              <header>
+                <h1>Clickable Grid</h1>
+                <input type="number" min="1" max="20" id="size" placeholder="Please select a number between 1 and 10." required>
+                <button id="generateButton">Generate</button>
+                <button id="clearButton">Clear</button>
+                <p>Attention: After grids are generated, you can click any of the grid which will activate a popup window containing its value.</p>
+              </header>
+              
+              <div id="grids"></div>             
             </div>
           </div>
         </div>
+
         <div class="card">
           <div class="card-header" id="headingTwo">
             <h2 class="mb-0">
