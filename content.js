@@ -94,7 +94,7 @@ function process_words(dict, us, node, element){
         node.nodeValue = ""; // clear everything, we will construct node from anew
         var after_text = text; // text we have yet to go through
         for (const word of words){
-            var regex = new RegExp("\\b"+word+"\\b|\\b"+word+"s\\b|\\b"+word+"es\\b","i");
+            // var regex = new RegExp("\\b"+word+"\\b|\\b"+word+"s\\b|\\b"+word+"es\\b","i");
             // todo: instead of having plurals in the dictionary, do the plural detection here
             // if (word in dict){
             if (word in us){

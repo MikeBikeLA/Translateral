@@ -36,17 +36,17 @@ function array_to_dict(array) {
 			}
 			// add each english word and it's translation to the dict
 			// TODO: semicolon parsing
-			const words = array[i][english_col].split(';');
-			for (const word of words){
+			// const words = array[i][english_col].split(';');
+			// for (const word of words){
 				dict[word] = { "trans": array[i][trans_col],
 							   "reading": array[i][reading_col] };
 				// TODO: improve plural handling
 				// basic plural handling, just add s and es to the dict
 				// dict[word+"es"] = { "trans": array[i][trans_col],
 				// 			   		"reading": array[i][reading_col] };
-			 	// dict[word+"s"] = { "trans": array[i][trans_col],
+			 	//    dict[word+"s"] = { "trans": array[i][trans_col],
 				// 			   	   "reading": array[i][reading_col] };
-			}
+			// }
 		}
 		console.log("Constructed dict (" + Object.keys(dict).length + " entries)");
 		save_dict(dict);
