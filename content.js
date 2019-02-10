@@ -180,7 +180,7 @@ function retrieve_dict(){
         console.log("dict retrieved: " + Object.keys(dict_wrapper.dict).length + " entries");
         // replace(dict_wrapper.dict);
         chrome.storage.sync.get("user_selected", function(user_selected_wrapper){
-            if (!user_selected_wrapper.user_selected.size){
+            if (!user_selected_wrapper.user_selected || !user_selected_wrapper.user_selected.size){
                 // no words selected, so show all of them
                 console.log("us does not exist, defaulting to dict");
                 replace(dict_wrapper.dict, dict_wrapper.dict);

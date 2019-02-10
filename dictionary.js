@@ -38,8 +38,11 @@ function array_to_dict(array) {
 			// TODO: semicolon parsing
 			// const words = array[i][english_col].split(';');
 			// for (const word of words){
-				dict[word] = { "trans": array[i][trans_col],
+				// dict[word] = { "trans": array[i][trans_col],
+				// 			   "reading": array[i][reading_col] };
+				dict[array[i][english_col]] = { "trans": array[i][trans_col],
 							   "reading": array[i][reading_col] };
+			    console.log(array[i][english_col]);
 				// TODO: improve plural handling
 				// basic plural handling, just add s and es to the dict
 				// dict[word+"es"] = { "trans": array[i][trans_col],
