@@ -62,10 +62,6 @@ function create_translation_tables(){
                 tr.appendChild(td);
             } 
             tbody_array[value.bucket].appendChild(tr);
-            
-            // creates a new tr (table row) for this k,v pair and appends it to the corresponding tbody
-            tbody_array[value.bucket].appendChild(create_tr(key, value));
-            num_rows[value.bucket]++;
         }
         for (let i=0; i<=2; i++){
             table_array[i].appendChild(tbody_array[i]);
