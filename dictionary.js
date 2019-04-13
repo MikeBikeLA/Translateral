@@ -1,7 +1,7 @@
-// Saves the language-specific master dict to chrome.storage.local
-function save_dict(dict){
-	chrome.storage.local.set({"dict": dict});
-	console.log("saved dict (" + Object.keys(dict).length + " entries) to chrome.storage");
+// Saves a dict named 'key' to chrome.storage.local
+function save_dict(key, dict){
+	chrome.storage.local.set({[key]: dict});
+	console.log("saved " + key + " (" + Object.keys(dict).length + " entries) to chrome.storage");
 }
 
 // Takes in a table and returns dict with key, value pairs
@@ -52,7 +52,7 @@ function array_to_dict(array) {
 			// }
 		}
 		console.log("Constructed dict (" + Object.keys(dict).length + " entries)");
-		save_dict(dict);
+		save_dict("dict", dict);
  	 });
 }
 
