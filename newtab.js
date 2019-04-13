@@ -12,10 +12,26 @@ function create_translation_tables(){
         let num_rows = [0, 0, 0]; // contains # of rows to create for each bucket
 
         let translations_body = document.getElementById("translations_body");
+        
+        let container = document.createElement("DIV");
+        container.classList.add("container");
+        translations_body.appendChild(container);
+        let row = document.createElement("DIV");
+        row.classList.add("row");
+        container.appendChild(row);
+        let col_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
+        for (let col of col_array){
+            col.classList.add("col-sm");
+            row.appendChild(col);
+        }
+
         let table_array = [document.createElement("TABLE"), document.createElement("TABLE"), document.createElement("TABLE")];
         table_array[0].id = "inactive_words";
         table_array[1].id = "active_words";
         table_array[2].id = "learned_words";
+        for (let table of table_array){
+            table.classList.add("table-striped")
+        }
         let tbody_array = [document.createElement('TBODY'), document.createElement('TBODY'), document.createElement('TBODY')];
 
         for (const [key, value] of Object.entries(local_bank_wrapper.local_bank)){
@@ -44,7 +60,7 @@ function create_translation_tables(){
         }
         for (let i=0; i<=2; i++){
             table_array[i].appendChild(tbody_array[i]);
-            translations_body.appendChild(table_array[i]);
+            col_array[i].appendChild(table_array[i]);
         }
         console.log("num_rows: " + num_rows);
     })
