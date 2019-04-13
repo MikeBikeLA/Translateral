@@ -14,9 +14,7 @@ function array_to_dict(array) {
 	    var new_entries = 0;
 	    const locale = items.locale;
 	    // add each english word and it's translation to the local_bank
-			// TODO: semicolon parsing
-			// const words = array[i][english_col].split(';');
-			// local_bank[word] = { "trans": array[i][trans_col],
+ 			// local_bank[word] = { "trans": array[i][trans_col],
 			// 			   "reading": array[i][reading_col],
 			// 				"bucket": <inactive = 0, active = 1, learned = 2>
 		    // 				"user_defined": <bool> };
@@ -110,7 +108,7 @@ function initialize_local_bank(){
 function initialize_active_dict(){
 	chrome.storage.sync.get({locale: "zh_CN"}, function(locale_wrapper){
 		chrome.storage.sync.get({"active_dict": {}}, function(active_dict_wrapper){
-			
+			// TODO: add starter words
 		});
 	})
 }

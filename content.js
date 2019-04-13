@@ -175,8 +175,18 @@ function replace(active_dict){
 // is loaded, we need to retrieve_dict from chrome.storage each time
 function retrieve_active_dict(){
     chrome.storage.sync.get({"active_dict": {}}, function(active_dict_wrapper) {
-        console.log("active_dict retrieved: " + Object.keys(active_dict_wrapper.active_dict).length + " entries");
-        replace(active_dict_wrapper.active_dict);
+        var active_dict = active_dict_wrapper.active_dict;
+        console.log("active_dict retrieved: " + Object.keys(active_dict).length + " entries");
+        var expanded_dict = {};
+        // loop through all active dict keys, separate them by semicolon, and add them to expanded_dict
+        for (const [key, value] of Object.entries(active_dict)){
+            const words = key.split(';');
+            for (const word of words){
+                expanded_dict[word] = value;
+            }
+        }
+        console.log("expanded_dict generated: " + Object.keys(expanded_dict).length + " entries");
+        replace(expanded_dict);
         return;
      });
 }
