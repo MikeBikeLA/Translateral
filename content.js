@@ -83,21 +83,23 @@ function find_first_word(active_dict, words){
 // node: the node that contains the text we wish to replace
 // element: the element that has node as its child
 // returns the result nodes
-function process_words(active_dict, node, element){
+function process_words(expanded_dict, node, element){
     const text = node.nodeValue;
     // split text up into words
     const words = text.match(/[a-z'\-]+/gi);
     var result_nodes = []; // we will construct our result by pushing result nodes to this array
-    if (words != null && find_first_word(active_dict, words) !== null){
+    var desensitized_dict = desensitize(expanded_dict);
+    if (words != null && find_first_word(desensitized_dict, words) !== null){
         // console.log(node.nodeValue);
         node.nodeValue = ""; // clear everything, we will construct node from anew
         var after_text = text; // text we have yet to go through
         for (const word of words){
             // var regex = new RegExp("\\b"+word+"\\b|\\b"+word+"s\\b|\\b"+word+"es\\b","i");
             // todo: instead of having plurals in the dictionary, do the plural detection here
-            if (word in active_dict){
+            word_regex = new RegExp("\\b"+word+"\\b", 'i');
+            if (word in desensitized_dict){
                 // candidate found
-                var before_and_after = after_text.split(new RegExp("\\b"+word+"\\b","i")); // split the text using word as delimiter
+                var before_and_after = after_text.split(word_regex); // split the text using word as delimiter
                 // console.log(before_and_after);
                 const before = document.createTextNode(before_and_after[0]);
                 result_nodes.push(before);
@@ -110,13 +112,36 @@ function process_words(active_dict, node, element){
                     }
                     after_text += before_and_after[i];
                 }
-                result_nodes.push(create_trans(word, active_dict[word]["trans"], active_dict[word]["reading"]));
+                result_nodes.push(create_trans(word, desensitized_dict[word]["trans"], desensitized_dict[word]["reading"]));
             }
         }
         const after = document.createTextNode(after_text); // node version of after_text
         result_nodes.push(after);
     }
     return result_nodes;
+}
+
+// returns a dict with each key of expanded_dict as upper and lower case
+function desensitize(expanded_dict){
+    desensitized_dict = {}
+    for (let [key, value] of Object.entries(expanded_dict)){
+        if (key.charAt(0) == key.charAt(0).toUpperCase() && key.charAt(1) == key.charAt(1).toLowerCase()){
+            // Uppercase (and second character is lowercase), add this and the lowercase version
+            desensitized_dict[key] = value;
+            desensitized_dict[key.toLowerCase()] = value;
+        }
+        else if (key.charAt(0) == key.charAt(0).toLowerCase()){
+            // Key is lowercase, add this and the uppercase version
+            desensitized_dict[key] = value;
+            key = key.charAt(0).toUpperCase() + key.slice(1);
+            desensitized_dict[key] = value;
+        }
+        else{
+            // Just add the one key that was in expanded dict
+            desensitized_dict[key] = value;
+        }
+    }
+    return desensitized_dict;
 }
 
 // The main replacement algorithm
