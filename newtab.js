@@ -1,12 +1,10 @@
-function load_new_tab(){
-    chrome.storage.local.get("local_bank", function(local_bank_wrapper) {
-        let num_words_learned = Object.keys(local_bank_wrapper.local_bank).length;
-        document.getElementById("num-words-learned").innerHTML = num_words_learned;    
-        console.log("NUMBER OF WORDS LEARNED");
-        console.log(num_words_learned);
-     });
+// updates the document's num-words-learned value
+function update_num_words_learned(){
+    document.getElementById("num-words-learned").innerText = 
+        document.getElementById("learned_words").firstChild.children.length;    
 }
 
+// returns num_rows, which are the counts for the words in [inactive, active, learned]
 function create_translation_tables(){
     chrome.storage.local.get({"local_bank": {}}, function(local_bank_wrapper){
         let num_rows = [0, 0, 0]; // contains # of rows to create for each bucket
@@ -55,6 +53,8 @@ function create_translation_tables(){
             col_array[i].appendChild(table_array[i]);
         }
         console.log("num_rows: " + num_rows);
+        update_num_words_learned();
+        return num_rows;
     })
 }
 
@@ -123,6 +123,8 @@ function arrow_handler(rowDiv, value, dest_bucket){
         rowDiv.parentNode.removeChild(rowDiv); // remove from current table
         // reconstruct a new rowDiv from scratch (for simplicity) and add it to the destination table
         dest_tbody.appendChild(create_tr(key, value));
+        // update the num_words_learned
+        update_num_words_learned();
     });
     
 }
@@ -167,6 +169,5 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 });
 
-load_new_tab();
 create_translation_tables();
 console.log("newtab.js loaded");
