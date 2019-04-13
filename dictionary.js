@@ -42,7 +42,7 @@ function array_to_dict(array) {
 			// 			   "reading": array[i][reading_col],
 			// 				"bucket": <inactive = 0, active = 1, learned = 2>
 		    // 				"user_defined": <bool> };
-			chrome.storage.sync.get({"dict": {}}, function(data){
+			chrome.storage.local.get({"dict": {}}, function(data){
 				if (!(array[i][english_col] in data.dict)){
 					dict[array[i][english_col]] = { "trans": array[i][trans_col],
 												    "reading": array[i][reading_col],
