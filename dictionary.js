@@ -13,29 +13,7 @@ function array_to_dict(array) {
 	    var local_bank = {}; // dictionary to construct and save
 	    var new_entries = 0;
 	    const locale = items.locale;
-	    // this is an asynchronous function, so the following code will run once
-	    // get() gets called at some undetermined time in the future
-	    for (let i = 0; i < array.length; i++) {
-			// iterate through each row
-			// first row is the header row
-			if (i === 0){
-				// find the column for the locale we want
-				for (let j = 0; j < array[i].length; j++) {
-					if (array[i][j] === "en_US"){
-						var english_col = j;
-						console.log("Found en_US in column " + english_col);
-					}
-					if (array[i][j] == locale){
-						var trans_col = j;
-						console.log("Found " + locale + " in column " + trans_col);
-						var reading_col = ++j;
-						console.log("Using next column as reading:" + array[i][j]);
-						break;
-					}
-				}
-				continue;
-			}
-			// add each english word and it's translation to the local_bank
+	    // add each english word and it's translation to the local_bank
 			// TODO: semicolon parsing
 			// const words = array[i][english_col].split(';');
 			// local_bank[word] = { "trans": array[i][trans_col],
@@ -43,14 +21,45 @@ function array_to_dict(array) {
 			// 				"bucket": <inactive = 0, active = 1, learned = 2>
 		    // 				"user_defined": <bool> };
 			chrome.storage.local.get({"local_bank": {}}, function(data){
-				if (!(array[i][english_col] in data.local_bank)){
-					local_bank[array[i][english_col]] = { "trans": array[i][trans_col],
-												    "reading": array[i][reading_col],
-												    "bucket": 0,
-												    "user_defined": false };
-				    console.log(array[i][english_col]);
-				    new_entries++;
-			    }
+				for (let i = 0; i < array.length; i++) {
+					// iterate through each row
+					// first row is the header row
+					if (i === 0){
+						// find the column for the locale we want
+						for (let j = 0; j < array[i].length; j++) {
+							if (array[i][j] === "en_US"){
+								var english_col = j;
+								console.log("Found en_US in column " + english_col);
+							}
+							if (array[i][j] == locale){
+								var trans_col = j;
+								console.log("Found " + locale + " in column " + trans_col);
+								var reading_col = ++j;
+								console.log("Using next column as reading:" + array[i][j]);
+								break;
+							}
+						}
+						continue;
+					}
+					if (!(array[i][english_col] in data.local_bank)){
+						local_bank[array[i][english_col]] = { "trans": array[i][trans_col],
+													    "reading": array[i][reading_col],
+													    "bucket": 0,
+													    "user_defined": false };
+					    // console.log(array[i][english_col]);
+					    new_entries++;
+				    }
+					if (!(array[i][english_col] in data.local_bank)){
+						local_bank[array[i][english_col]] = {
+							"trans": array[i][trans_col],
+						    "reading": array[i][reading_col],
+						    "bucket": 0,
+						    "user_defined": false };
+					    // console.log(array[i][english_col]);
+					    new_entries++;
+				    }
+				}
+
 			    console.log("Added " + new_entries + " new entries to local_bank");
 				if (new_entries > 0){
 					save_local_bank(local_bank);
@@ -63,7 +72,7 @@ function array_to_dict(array) {
 			// 			   		"reading": array[i][reading_col] };
 		 	//    dict[word+"s"] = { "trans": array[i][trans_col],
 			// 			   	   "reading": array[i][reading_col] };
-		}
+	    
 
  	 });
 }
@@ -115,17 +124,44 @@ function initialize_local_bank(){
 // }
 
 function bucket_move(key, destination){
-	chrome.storage.local.get("local_bank", function(data){
-		if (key in data.local_bank){
-			let current_bucket = data.local_bank[key].bucket
-			if (current_bucket == destination){
+	chrome.storage.local.get({"local_bank": {}}, function(local_bank_wrapper){
+		if (key in local_bank_wrapper.local_bank){
+			let current_bucket = local_bank_wrapper.local_bank[key].bucket
+			if (current_bucket == destination){ // no move required
 				return;
 			}
-			if (current_bucket == 1){
-				chrome.storage.sync.get("active_dict", )
+			if (current_bucket === 1){ // moving out of active dict
+				chrome.storage.sync.get({"active_dict": {}}, function(active_dict_wrapper){
+					if (key in active_dict_wrapper.active_dict){
+						delete active_dict_wrapper.active_dict[key];
+						console.log("Deleted " + key + " from active_dict");
+					}
+					else{
+						// weird state, doesn't exist in active_dict even though local_dict says it should be
+						weird_state_handler();
+					}
+				});
 			}
+			if (destination === 1){ // moving into active dict
+				chrome.storage.sync.get({"active_dict": {}}, function(active_dict_wrapper){
+					if (!(key in active_dict_wrapper.active_dict)){ // shouldn't exist
+						weird_state_handler();
+					}
+					else{
+						// add it to active dict
+						active_dict_wrapper.active_dict[key] = local_bank_wrapper.local_bank[key];
+						console.log("Added " + key + " to active_dict");
+					}
+				});
+			}
+			local_bank_wrapper.local_bank[key].bucket = destination;
+			console.log("Moved " + key + " to " + destination);
 		}
 	})
+}
+
+function weird_state_handler(){
+	console.log("WEIRD STATE DETECTED!!! Attempting to rebuild...");
 }
 
 console.log("dictionary.js loaded");

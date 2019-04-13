@@ -174,7 +174,7 @@ function replace(active_dict){
 // Since this content.js file will run from the start each time a new page
 // is loaded, we need to retrieve_dict from chrome.storage each time
 function retrieve_active_dict(){
-    chrome.storage.sync.get("active_dict", function(active_dict_wrapper) {
+    chrome.storage.sync.get({"active_dict": {}}, function(active_dict_wrapper) {
         console.log("active_dict retrieved: " + Object.keys(active_dict_wrapper.active_dict).length + " entries");
         replace(active_dict_wrapper.active_dict);
         return;
