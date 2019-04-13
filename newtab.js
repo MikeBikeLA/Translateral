@@ -8,6 +8,16 @@ function load_new_tab(){
      });
 }
 
+function create_translation_tables(){
+    chrome.storage.local.get({"local_bank": {}}, function(local_bank_wrapper){
+        var num_rows = [0, 0, 0]; // contains # of rows to create for each bucket
+        for (const [key, value] of Object.entries(local_bank_wrapper.local_bank)){
+            num_rows[value.bucket]++;
+        }
+        console.log("num_rows: " + num_rows);
+    })
+}
+
 /* When the user clicks on the button, 
 toggle between hiding and showing the dropdown content */
 function dropdownFunction() {
@@ -49,4 +59,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 load_new_tab();
+create_translation_tables();
 console.log("newtab.js loaded");

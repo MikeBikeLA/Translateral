@@ -7,7 +7,7 @@ chrome.runtime.onInstalled.addListener(function() {
 
 chrome.runtime.onStartup.addListener(function() {
 	console.log("onStartup called, loading dict");
-    chrome.storage.local.clear();
+    chrome.storage.local.clear(); // todo: remove?
     initialize_local_bank();
     
 });
