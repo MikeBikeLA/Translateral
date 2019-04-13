@@ -115,39 +115,54 @@ function initialize_active_dict(){
 	})
 }
 
-function bucket_move(key, destination){
+function bucket_move(key, destination, callback){
 	chrome.storage.local.get({"local_bank": {}}, function(local_bank_wrapper){
-		if (key in local_bank_wrapper.local_bank){
-			let current_bucket = local_bank_wrapper.local_bank[key].bucket
+		let local_bank = local_bank_wrapper.local_bank;
+		if (key in local_bank){
+			let current_bucket = local_bank[key].bucket;
 			if (current_bucket == destination){ // no move required
-				return;
+				callback();
 			}
 			if (current_bucket === 1){ // moving out of active dict
 				chrome.storage.sync.get({"active_dict": {}}, function(active_dict_wrapper){
-					if (key in active_dict_wrapper.active_dict){
-						delete active_dict_wrapper.active_dict[key];
-						console.log("Deleted " + key + " from active_dict");
+					let active_dict = active_dict_wrapper.active_dict;
+					if (key in active_dict){
+						delete active_dict[key];
+						chrome.storage.sync.set({"active_dict": active_dict}, function(){
+							console.log("Deleted " + key + " from active_dict:");
+							// console.log(active_dict);
+						});
 					}
 					else{
 						// weird state, doesn't exist in active_dict even though local_dict says it should be
-						weird_state_handler("weird state 1");
+						weird_state_handler("Attempted to move out of active_dict but entry was not found!");
 					}
 				});
 			}
 			if (destination === 1){ // moving into active dict
 				chrome.storage.sync.get({"active_dict": {}}, function(active_dict_wrapper){
-					if (!(key in active_dict_wrapper.active_dict)){ // shouldn't exist
+					let active_dict = active_dict_wrapper.active_dict;
+					if (!(key in active_dict)){ // shouldn't exist
 						// add it to active dict
-						active_dict_wrapper.active_dict[key] = local_bank_wrapper.local_bank[key];
-						console.log("Added " + key + " to active_dict");
+						active_dict[key] = local_bank[key];
+						chrome.storage.sync.set({"active_dict": active_dict}, function(){
+							console.log("Added " + key + " to active_dict:");
+							// console.log(active_dict);
+						});
 					}
 					else{
-						weird_state_handler("weird state 2");						
+						weird_state_handler("Attempted to move into active_dict but was already found!");						
 					}
 				});
 			}
-			local_bank_wrapper.local_bank[key].bucket = destination;
-			console.log("Moved " + key + " to " + destination);
+			local_bank[key].bucket = destination;
+			chrome.storage.local.set({"local_bank": local_bank}, function(){
+				console.log("Moved " + key + " to " + destination);
+				callback(local_bank[key]);
+			});
+		}
+		else{
+			weird_state_handler("Key not found in local_bank!")
 		}
 	})
 }
