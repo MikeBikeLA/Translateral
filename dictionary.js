@@ -98,14 +98,7 @@ function csv_to_dict(text) {
     array_to_dict(ret);
 }
 
-// Main function: Loads the master dictionary into chrome.storage
-function load_dict(){
-	console.log("Fetching vocab.csv from Github");
-	fetch('https://raw.githubusercontent.com/MikeBikeLA/Translateral/master/vocab.csv')
-		.then(response => response.text())
-		.then(text => csv_to_dict(text));
-}
-
+// Main function: Loads github master + user-defined words into chrome.storage
 function initialize_local_bank(){
 	console.log("Fetching vocab.csv from Github");
 	fetch('https://raw.githubusercontent.com/MikeBikeLA/Translateral/master/vocab.csv')
