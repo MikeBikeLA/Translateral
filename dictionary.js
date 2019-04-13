@@ -114,14 +114,13 @@ function initialize_local_bank(){
 }
 
 // using 'bucket' = 1 to determine active
-// function initialize_active_dict(){
-// 	chrome.storage.sync.get({locale: "zh_CN"}, function(data){
-// 		var active_dict_key = "active_dict_" + locale; //locale is a string
-// 		chrome.storage.local.get({[active_dict_key]: {}}, function(data){
-
-// 		});
-// 	})
-// }
+function initialize_active_dict(){
+	chrome.storage.sync.get({locale: "zh_CN"}, function(locale_wrapper){
+		chrome.storage.sync.get({"active_dict": {}}, function(active_dict_wrapper){
+			
+		});
+	})
+}
 
 function bucket_move(key, destination){
 	chrome.storage.local.get({"local_bank": {}}, function(local_bank_wrapper){
