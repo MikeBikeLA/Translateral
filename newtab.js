@@ -62,6 +62,9 @@ function create_translation_tables(){
                 tr.appendChild(td);
             } 
             tbody_array[value.bucket].appendChild(tr);
+            
+            // creates a new tr (table row) for this k,v pair and appends it to the corresponding tbody
+            tbody_array[value.bucket].appendChild(create_tr(key, value));
             num_rows[value.bucket]++;
         }
         for (let i=0; i<=2; i++){
@@ -103,7 +106,7 @@ function arrow_handler(rowDiv, destination){
 }
 
 /* When the user clicks on the button, 
-toggle between hiding and showing the dropdown content */
+toggle between hiding and showing the language dropdown content */
 function dropdownFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
