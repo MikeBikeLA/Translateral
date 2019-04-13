@@ -156,3 +156,14 @@ btn {
 .translation-text-2 {
   font-size: 28px;   
 }
+
+table {
+  margin: 0px auto;
+  float: none;
+}
+
+.arrow-button {
+  font-size: 28px;
+  font-weight: bold;
+  color: red;
+}

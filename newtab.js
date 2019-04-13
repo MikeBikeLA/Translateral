@@ -22,6 +22,7 @@ function create_translation_tables(){
         let col_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
         for (let col of col_array){
             col.classList.add("col-sm");
+            // col.classList.add("center-block")
             row.appendChild(col);
         }
         let scrollable_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
@@ -80,20 +81,26 @@ function create_tr(key, value){
 function create_arrow(key, tr, value, direction){
     // -1 = left, 1 = right
     if (direction === -1){
-        let td_left_arrow = document.createElement('TD');
+        let left_td = document.createElement('TD');
+        let td_left_arrow = document.createElement('BUTTON');
         td_left_arrow.id = "row_left_" + key; // row_left_english
+        td_left_arrow.classList.add("arrow-button");
         td_left_arrow.innerText="<";
         td_left_arrow.onclick = function(){
             arrow_handler(tr, value, value.bucket-1);
         }
+        left_td.appendChild(td_left_arrow);
         return td_left_arrow;
     }
-    let td_right_arrow = document.createElement('TD');
+    let right_td = document.createElement('TD');
+    let td_right_arrow = document.createElement('BUTTON');
     td_right_arrow.id = "row_right_" + key;
+    td_right_arrow.classList.add("arrow-button");
     td_right_arrow.innerText=">";
     td_right_arrow.onclick = function(){
         arrow_handler(tr, value, value.bucket+1);
     }
+    right_td.appendChild(td_right_arrow);
     return td_right_arrow;
 }
 
