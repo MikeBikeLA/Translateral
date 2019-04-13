@@ -1,5 +1,5 @@
 // Saves local_bank to chrome.storage.local
-function save_dict(local_bank){
+function save_local_bank(local_bank){
 	chrome.storage.local.set({"local_bank": local_bank});
 	console.log("saved local_bank (" + Object.keys(local_bank).length + " entries) to chrome.storage");
 }
@@ -53,7 +53,7 @@ function array_to_dict(array) {
 			    }
 			    console.log("Added " + new_entries + " new entries to local_bank");
 				if (new_entries > 0){
-					save_dict(local_bank);
+					save_local_bank(local_bank);
 				}
 			});
 			
