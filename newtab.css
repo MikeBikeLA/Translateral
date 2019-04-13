@@ -142,17 +142,3 @@ body {
 btn {
   font-weight: bold;
 }
-
-.translation-text-1, .translation-text-2 {
-  color: #fff;
-  text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
-  font-size: 20px;  
-}
-
-.translation-text-1 {
-  font-weight: bold;
-}
-
-.translation-text-2 {
-  font-size: 28px;   
-}
