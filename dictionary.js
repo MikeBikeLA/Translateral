@@ -116,6 +116,7 @@ function initialize_active_dict(){
 }
 
 function bucket_move(key, destination){
+	console.log("bucket moving")
 	chrome.storage.local.get({"local_bank": {}}, function(local_bank_wrapper){
 		if (key in local_bank_wrapper.local_bank){
 			let current_bucket = local_bank_wrapper.local_bank[key].bucket
@@ -130,19 +131,19 @@ function bucket_move(key, destination){
 					}
 					else{
 						// weird state, doesn't exist in active_dict even though local_dict says it should be
-						weird_state_handler();
+						weird_state_handler("weird state 1");
 					}
 				});
 			}
 			if (destination === 1){ // moving into active dict
 				chrome.storage.sync.get({"active_dict": {}}, function(active_dict_wrapper){
 					if (!(key in active_dict_wrapper.active_dict)){ // shouldn't exist
-						weird_state_handler();
-					}
-					else{
 						// add it to active dict
 						active_dict_wrapper.active_dict[key] = local_bank_wrapper.local_bank[key];
 						console.log("Added " + key + " to active_dict");
+					}
+					else{
+						weird_state_handler("weird state 2");						
 					}
 				});
 			}
@@ -152,8 +153,8 @@ function bucket_move(key, destination){
 	})
 }
 
-function weird_state_handler(){
-	console.log("WEIRD STATE DETECTED!!! Attempting to rebuild...");
+function weird_state_handler(arg){
+	console.log("WEIRD STATE DETECTED!!! Attempting to rebuild... " + arg);
 }
 
 console.log("dictionary.js loaded");
