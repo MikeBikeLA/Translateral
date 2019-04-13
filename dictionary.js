@@ -1,7 +1,7 @@
-// Saves a dict named 'key' to chrome.storage.local
-function save_dict(key, dict){
-	chrome.storage.local.set({[key]: dict});
-	console.log("saved " + key + " (" + Object.keys(dict).length + " entries) to chrome.storage");
+// Saves dict to chrome.storage.local
+function save_dict(dict){
+	chrome.storage.local.set({"dict": dict});
+	console.log("saved dict (" + Object.keys(dict).length + " entries) to chrome.storage");
 }
 
 // Takes in a table and returns dict with key, value pairs
@@ -11,6 +11,7 @@ function array_to_dict(array) {
 	    locale: "zh_CN" // default is Chinese (Simplified)
 	  }, function(items) {
 	    var dict = {}; // dictionary to construct and save
+	    var new_entries = 0;
 	    const locale = items.locale;
 	    // this is an asynchronous function, so the following code will run once
 	    // get() gets called at some undetermined time in the future
@@ -37,22 +38,33 @@ function array_to_dict(array) {
 			// add each english word and it's translation to the dict
 			// TODO: semicolon parsing
 			// const words = array[i][english_col].split(';');
-			// for (const word of words){
-				// dict[word] = { "trans": array[i][trans_col],
-				// 			   "reading": array[i][reading_col] };
-				dict[array[i][english_col]] = { "trans": array[i][trans_col],
-							   "reading": array[i][reading_col] };
-			    console.log(array[i][english_col]);
-				// TODO: improve plural handling
-				// basic plural handling, just add s and es to the dict
-				// dict[word+"es"] = { "trans": array[i][trans_col],
-				// 			   		"reading": array[i][reading_col] };
-			 	//    dict[word+"s"] = { "trans": array[i][trans_col],
-				// 			   	   "reading": array[i][reading_col] };
-			// }
+			// dict[word] = { "trans": array[i][trans_col],
+			// 			   "reading": array[i][reading_col],
+			// 				"bucket": <inactive = 0, active = 1, learned = 2>
+		    // 				"user_defined": <bool> };
+			chrome.storage.sync.get({"dict": {}}, function(data){
+				if (!(array[i][english_col] in data.dict)){
+					dict[array[i][english_col]] = { "trans": array[i][trans_col],
+												    "reading": array[i][reading_col],
+												    "bucket": 0,
+												    "user_defined": false };
+				    console.log(array[i][english_col]);
+				    new_entries++;
+			    }
+			    console.log("Added " + new_entries + " new entries to dict");
+				if (new_entries > 0){
+					save_dict(dict);
+				}
+			});
+			
+			// TODO: improve plural handling
+			// basic plural handling, just add s and es to the dict
+			// dict[word+"es"] = { "trans": array[i][trans_col],
+			// 			   		"reading": array[i][reading_col] };
+		 	//    dict[word+"s"] = { "trans": array[i][trans_col],
+			// 			   	   "reading": array[i][reading_col] };
 		}
-		console.log("Constructed dict (" + Object.keys(dict).length + " entries)");
-		save_dict("dict", dict);
+
  	 });
 }
 
@@ -90,18 +102,16 @@ function initialize_local_bank(){
 	fetch('https://raw.githubusercontent.com/MikeBikeLA/Translateral/master/vocab.csv')
 		.then(response => response.text())
 		.then(text => csv_to_dict(text));
-	
 }
 
+// using 'bucket' = 1 to determine active
+// function initialize_active_dict(){
+// 	chrome.storage.sync.get({locale: "zh_CN"}, function(data){
+// 		var active_dict_key = "active_dict_" + locale; //locale is a string
+// 		chrome.storage.local.get({[active_dict_key]: {}}, function(data){
 
-
-function initialize_active_dict(){
-	chrome.storage.sync.get({locale: "zh_CN"}, function(data){
-		var active_dict_key = "active_dict_" + locale; //locale is a string
-		chrome.storage.local.get({[active_dict_key]: {}}, function(data){
-
-		});
-	})
-}
+// 		});
+// 	})
+// }
 
 console.log("dictionary.js loaded");
