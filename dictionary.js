@@ -1,7 +1,7 @@
-// Saves dict to chrome.storage.local
-function save_dict(dict){
-	chrome.storage.local.set({"dict": dict});
-	console.log("saved dict (" + Object.keys(dict).length + " entries) to chrome.storage");
+// Saves local_bank to chrome.storage.local
+function save_dict(local_bank){
+	chrome.storage.local.set({"local_bank": local_bank});
+	console.log("saved local_bank (" + Object.keys(local_bank).length + " entries) to chrome.storage");
 }
 
 // Takes in a table and returns dict with key, value pairs
@@ -10,7 +10,7 @@ function array_to_dict(array) {
 	chrome.storage.sync.get({
 	    locale: "zh_CN" // default is Chinese (Simplified)
 	  }, function(items) {
-	    var dict = {}; // dictionary to construct and save
+	    var local_bank = {}; // dictionary to construct and save
 	    var new_entries = 0;
 	    const locale = items.locale;
 	    // this is an asynchronous function, so the following code will run once
@@ -35,25 +35,25 @@ function array_to_dict(array) {
 				}
 				continue;
 			}
-			// add each english word and it's translation to the dict
+			// add each english word and it's translation to the local_bank
 			// TODO: semicolon parsing
 			// const words = array[i][english_col].split(';');
-			// dict[word] = { "trans": array[i][trans_col],
+			// local_bank[word] = { "trans": array[i][trans_col],
 			// 			   "reading": array[i][reading_col],
 			// 				"bucket": <inactive = 0, active = 1, learned = 2>
 		    // 				"user_defined": <bool> };
-			chrome.storage.local.get({"dict": {}}, function(data){
-				if (!(array[i][english_col] in data.dict)){
-					dict[array[i][english_col]] = { "trans": array[i][trans_col],
+			chrome.storage.local.get({"local_bank": {}}, function(data){
+				if (!(array[i][english_col] in data.local_bank)){
+					local_bank[array[i][english_col]] = { "trans": array[i][trans_col],
 												    "reading": array[i][reading_col],
 												    "bucket": 0,
 												    "user_defined": false };
 				    console.log(array[i][english_col]);
 				    new_entries++;
 			    }
-			    console.log("Added " + new_entries + " new entries to dict");
+			    console.log("Added " + new_entries + " new entries to local_bank");
 				if (new_entries > 0){
-					save_dict(dict);
+					save_dict(local_bank);
 				}
 			});
 			
@@ -113,5 +113,19 @@ function initialize_local_bank(){
 // 		});
 // 	})
 // }
+
+function bucket_move(key, destination){
+	chrome.storage.local.get("local_bank", function(data){
+		if (key in data.local_bank){
+			let current_bucket = data.local_bank[key].bucket
+			if (current_bucket == destination){
+				return;
+			}
+			if (current_bucket == 1){
+				chrome.storage.sync.get("active_dict", )
+			}
+		}
+	})
+}
 
 console.log("dictionary.js loaded");

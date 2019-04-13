@@ -47,8 +47,8 @@ function clear() {
 
 
 function load_new_tab(){
-    chrome.storage.local.get("dict", function(dict_wrapper) {
-        var num_words_learned = Object.keys(dict_wrapper.dict).length;
+    chrome.storage.local.get("local_bank", function(dict_wrapper) {
+        var num_words_learned = Object.keys(dict_wrapper.local_bank).length;
         document.getElementById("num-words-learned").innerHTML = num_words_learned;
     
         console.log("NUMBER OF WORDS LEARNED");
