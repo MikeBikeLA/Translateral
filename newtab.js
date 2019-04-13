@@ -22,14 +22,14 @@ function create_translation_tables(){
             col.classList.add("col-sm");
             row.appendChild(col);
         }
-        let category_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
-        category_array[0].innerText = "Inactive";
-        category_array[1].innerText = "Active";
-        category_array[2].innerText = "Learned";
-        for (let i = 0; i <=2 ; i++){
-            col_array[i].classList.add("category");
-            col_array[i].appendChild(category_array[i]);
-        }
+        // let category_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
+        // category_array[0].innerText = "Inactive";
+        // category_array[1].innerText = "Active";
+        // category_array[2].innerText = "Learned";
+        // for (let i = 0; i <=2 ; i++){
+        //     col_array[i].classList.add("category");
+        //     col_array[i].appendChild(category_array[i]);
+        // }
         // let scrollable_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
         for (let col of col_array){
             col.classList.add("pre-scrollable");

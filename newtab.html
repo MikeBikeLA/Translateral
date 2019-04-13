@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="styles.css"> -->
     <link rel="stylesheet" href="newtab.css">
-    <title>SAT</title>
+    <title>Subtle Asian Translation</title>
   </head>
 
   <body>
@@ -20,14 +20,38 @@
 
     <div class="bg">
       <div class="topstuff">
-        <div class="d-flex justify-content-center">
-          <h1>Subtle Asian Translation</h1>
-        </div>
+          <div class="container">
+            <div class="row">
+              <div class="col-2">
+              </div>
+
+              <div class="col-8">
+                <div>
+                  <h1 class="inline-block-child">Subtle</h1> 
+                    <div class="dropdown inline-block-child">
+                      <button id="dropdownID" class="dropbtn">Asian</button>
+                      <div id="myDropdown" class="dropdown-content">
+                        <a class="dropdown-language" id="drop1" href="#">Chinese (Simplified)</a>
+                        <a class="dropdown-language" id="drop2" href="#">Chinese (Traditional)</a>
+                        <a class="dropdown-language" id="drop3" href="#">Japanese</a>
+                      </div>
+                    </div>
+                  <h1 class="inline-block-child">Translation</h1>
+                </div>                
+              </div>
+
+              <div class="col-2">
+              </div>
+            </div>
+          </div>
+        
+
         <div class="d-flex justify-content-center">
           <h1 id="num-words-learned" style=font-size:200px></h1>
         </div>
+
         <div class="d-flex justify-content-center">
-            <h2>Words Learned</h2>
+          <h2 id="words-learned-title">Words Learned</h2>
         </div>
       </div>
 
@@ -35,82 +59,29 @@
 
         <div class="card" id="translations">
           <div class="card-header" id="headingOne">
-            <h2 class="mb-0">
-              <!-- <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne"> -->
+            <h2 id="accordion-h2" class="mb-0">
               <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">  
-                Translations
+                <div class="container">
+                  <div class="row">
+                    <div class="col category">
+                      Inactive
+                    </div>
+                    <div class="col category">
+                      Active
+                    </div>
+                    <div class="col category">
+                      Learned
+                    </div>
+                  </div>
+                </div>
               </button>
             </h2>
           </div>    
           <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
-            <div class="card-body" id="translations_body">
-
-                          
+            <div class="card-body" id="translations_body">                         
             </div>
           </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header" id="headingTwo">
-            <h2 class="mb-0">
-              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                Settings
-              </button>
-            </h2>
-          </div>
-          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
-            <div class="card-body">
-              
-              <div class="container">
-                <div class="row">
-                  <div class="col-sm">
-                      <div class="dropdown">
-                          <button id="dropdownID" class="dropbtn">Choose Language</button>
-                          <div id="myDropdown" class="dropdown-content">
-                            <a class="dropdown-language" id="drop1" href="#">Chinese (Simplified)</a>
-                            <a class="dropdown-language" id="drop2" href="#">Chinese (Traditional)</a>
-                            <a class="dropdown-language" id="drop3" href="#">Japanese</a>
-                          </div>
-                        </div>
-                  </div>
-                  <div class="col-sm">
-                    <label class="switch">
-                      <input type="checkbox">
-                      <span class="slider"></span>
-                    </label>
-                  </div>
-                  <div class="col-sm">
-                    <label class="switch">
-                      <input type="checkbox">
-                      <span class="slider"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <br><br><br><br><br><br><br><br>
-            </div>
-          </div>
-        </div>
-
-        
-        <!-- <div class="card">
-          <div class="card-header" id="headingThree">
-            <h2 class="mb-0">
-              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                Collapsible Group Item #3
-              </button>
-            </h2>
-          </div>
-          <div id="collapseThree" class="collapse" aria-labelledby="headingThree">
-            <div class="card-body">
-              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-    
+        </div>    
  
   <script src="newtab.js"></script>
   <script src="dictionary.js"></script>
