@@ -99,17 +99,17 @@ function create_arrow(key, tr, value, direction){
 
 function arrow_handler(rowDiv, value, dest_bucket){
     key = rowDiv.id.split("row_")[1];
-    bucket_move(key, dest_bucket, function(data){ // callback function needed because this is ASYNC
-        if (data == null){
+    bucket_move(key, dest_bucket, function(value){ // callback function needed because this is ASYNC
+        if (value == null){
             console.log("bucket_move returned null!!");
-            break;
+            return;
         }
         // remove this rowDiv from this table and add it to another table
         mappings = ["inactive_words", "active_words", "learned_words"];
         dest_tbody = document.getElementById(mappings[dest_bucket]).firstChild;
         rowDiv.parentNode.removeChild(rowDiv); // remove from current table
         // reconstruct a new rowDiv from scratch (for simplicity) and add it to the destination table
-        dest_tbody.appendChild(create_tr(key, data.value));
+        dest_tbody.appendChild(create_tr(key, value));
     });
     
 }
