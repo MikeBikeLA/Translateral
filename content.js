@@ -68,9 +68,9 @@ function insertAfter(newNode, referenceNode) {
 }
 
 // returns the first candidate word in words
-function find_first_word(dict, words){
+function find_first_word(active_dict, words){
     for (const word of words){
-        if (word in dict){
+        if (word in active_dict){
             return word;
         }
     }
@@ -79,25 +79,23 @@ function find_first_word(dict, words){
 
 // This function will take in a text node, find words to replace,
 // and then replace those words with <div>
-// dict: dictionary object
-// us: the user_selected Set
+// active_dict: active dictionary object
 // node: the node that contains the text we wish to replace
 // element: the element that has node as its child
 // returns the result nodes
-function process_words(dict, us, node, element){
+function process_words(active_dict, node, element){
     const text = node.nodeValue;
     // split text up into words
     const words = text.match(/[a-z'\-]+/gi);
     var result_nodes = []; // we will construct our result by pushing result nodes to this array
-    if (words != null && find_first_word(dict, words) !== null){
+    if (words != null && find_first_word(active_dict, words) !== null){
         // console.log(node.nodeValue);
         node.nodeValue = ""; // clear everything, we will construct node from anew
         var after_text = text; // text we have yet to go through
         for (const word of words){
             // var regex = new RegExp("\\b"+word+"\\b|\\b"+word+"s\\b|\\b"+word+"es\\b","i");
             // todo: instead of having plurals in the dictionary, do the plural detection here
-            // if (word in dict){
-            if (word in us){
+            if (word in active_dict){
                 // candidate found
                 var before_and_after = after_text.split(new RegExp("\\b"+word+"\\b","i")); // split the text using word as delimiter
                 // console.log(before_and_after);
@@ -112,7 +110,7 @@ function process_words(dict, us, node, element){
                     }
                     after_text += before_and_after[i];
                 }
-                result_nodes.push(create_trans(word, dict[word]["trans"], dict[word]["reading"]));
+                result_nodes.push(create_trans(word, active_dict[word]["trans"], active_dict[word]["reading"]));
             }
         }
         const after = document.createTextNode(after_text); // node version of after_text
@@ -122,7 +120,7 @@ function process_words(dict, us, node, element){
 }
 
 // The main replacement algorithm
-function replace(dict, us){
+function replace(active_dict){
     console.log("Starting replacement algorithm");
     const elements = document.getElementsByTagName('*');
     for (let i = 0; i < elements.length; i++) {
@@ -156,7 +154,7 @@ function replace(dict, us){
 
             if (node.nodeType === Node.TEXT_NODE) {
                 // split text into separate nodes
-                var result_nodes = process_words(dict, us, node, element);
+                var result_nodes = process_words(active_dict, node, element);
                 if (result_node = result_nodes.shift()){ // this assignment inside conditional is intentional
                     var previous = result_node;
                     element.replaceChild(result_node, node); // first element of result_nodes
@@ -175,20 +173,11 @@ function replace(dict, us){
 
 // Since this content.js file will run from the start each time a new page
 // is loaded, we need to retrieve_dict from chrome.storage each time
-function retrieve_dict(){
-    chrome.storage.local.get("dict", function(dict_wrapper) {
-        console.log("dict retrieved: " + Object.keys(dict_wrapper.dict).length + " entries");
-        // replace(dict_wrapper.dict);
-        chrome.storage.sync.get("user_selected", function(user_selected_wrapper){
-            if (!user_selected_wrapper.user_selected || !user_selected_wrapper.user_selected.size){
-                // no words selected, so show all of them
-                console.log("us does not exist, defaulting to dict");
-                replace(dict_wrapper.dict, dict_wrapper.dict);
-                return;
-            }
-            console.log("us retrieved: " + user_selected_wrapper.user_selected.size + " entries");
-            replace(dict_wrapper.dict, user_selected_wrapper.user_selected);
-        })
+function retrieve_active_dict(){
+    chrome.storage.sync.get("active_dict", function(active_dict_wrapper) {
+        console.log("active_dict retrieved: " + Object.keys(active_dict_wrapper.active_dict).length + " entries");
+        replace(active_dict_wrapper.active_dict);
+        return;
      });
 }
 
@@ -235,6 +224,6 @@ function create_def_window(){
     console.log("def_window created");
 }
 
-// Retrieve the dict from chrome.storage and do the replacement
-retrieve_dict();
+// Retrieve the active_dict from chrome.storage and do the replacement
+retrieve_active_dict();
 create_def_window();
