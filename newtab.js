@@ -23,26 +23,18 @@ function create_translation_tables(){
             tr.id = "row_" + key;  //row_english
             td_array = [];
             if (value.bucket === 1 || value.bucket === 2){
-                let td_left_arrow = document.createElement('TD');
-                td_left_arrow.innerText="<";
-                td_left_arrow.onclick = function(){
-                    arrowHandler(tr, value.bucket-1);
-                }
-                td_array.push(td_left_arrow);
+                td_array.push(create_arrow(key, tr, value.bucket, -1));
             }
             let td_key = document.createElement('TD');
+            td_key.id = "row_key_" + key; // row_key_english
             td_key.innerText=key;
             td_array.push(td_key);
             let td_value = document.createElement('TD');
+            td_value.id = "row_value_" + key; // row_value_english
             td_value.innerText=value.trans;
             td_array.push(td_value);
             if (value.bucket === 0 || value.bucket === 1){
-                let td_right_arrow = document.createElement('TD');
-                td_right_arrow.innerText=">";
-                td_right_arrow.onclick = function(){
-                    arrowHandler(tr, value.bucket+1);
-                }
-                td_array.push(td_right_arrow);
+                td_array.push(create_arrow(key, tr, value.bucket, 1));
             }
             for (let td of td_array){
                 tr.appendChild(td);
@@ -58,11 +50,33 @@ function create_translation_tables(){
     })
 }
 
-function arrowHandler(rowDiv, destination){
-    console.log("AHAH")
+function create_arrow(key, tr, cur_bucket, direction){
+    // -1 = left, 1 = right
+    if (direction === -1){
+        let td_left_arrow = document.createElement('TD');
+        td_left_arrow.id = "row_left_" + key; // row_left_english
+        td_left_arrow.innerText="<";
+        td_left_arrow.onclick = function(){
+            arrow_handler(tr, cur_bucket-1);
+        }
+        return td_left_arrow;
+    }
+    let td_right_arrow = document.createElement('TD');
+    td_right_arrow.id = "row_right_" + key;
+    td_right_arrow.innerText=">";
+    td_right_arrow.onclick = function(){
+        arrow_handler(tr, cur_bucket+1);
+    }
+    return td_right_arrow;
+}
+
+function arrow_handler(rowDiv, destination){
     key = rowDiv.id.split("row_")[1];
-    console.log(key);
     bucket_move(key, destination);
+    // remove this rowDiv from this table and add it to another table
+    console.log(rowDiv.childNodes);
+    rowDiv.parentNode.removeChild(rowDiv);
+
 }
 
 /* When the user clicks on the button, 

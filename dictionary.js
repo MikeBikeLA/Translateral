@@ -116,7 +116,6 @@ function initialize_active_dict(){
 }
 
 function bucket_move(key, destination){
-	console.log("bucket moving")
 	chrome.storage.local.get({"local_bank": {}}, function(local_bank_wrapper){
 		if (key in local_bank_wrapper.local_bank){
 			let current_bucket = local_bank_wrapper.local_bank[key].bucket
