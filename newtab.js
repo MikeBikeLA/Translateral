@@ -39,47 +39,52 @@ function create_translation_tables(){
         let tbody_array = [document.createElement('TBODY'), document.createElement('TBODY'), document.createElement('TBODY')];
 
         for (const [key, value] of Object.entries(local_bank_wrapper.local_bank)){
-            let tr = document.createElement('TR');
-            tr.id = "row_" + key;  //row_english
-            td_array = [];
-            if (value.bucket === 1 || value.bucket === 2){
-                td_array.push(create_arrow(key, tr, value.bucket, -1));
-            }
-            let td_key = document.createElement('TD');
-            td_key.id = "row_key_" + key; // row_key_english
-            td_key.classList.add("translation-text-1");
-            td_key.innerText=key;
-            td_array.push(td_key);
-            let td_value = document.createElement('TD');
-            td_value.id = "row_value_" + key; // row_value_english
-            td_value.classList.add("translation-text-2");
-            td_value.innerText=value.trans;
-            td_array.push(td_value);
-            if (value.bucket === 0 || value.bucket === 1){
-                td_array.push(create_arrow(key, tr, value.bucket, 1));
-            }
-            for (let td of td_array){
-                tr.appendChild(td);
-            } 
-            tbody_array[value.bucket].appendChild(tr);
+            // creates a new tr (table row) for this k,v pair and appends it to the corresponding tbody
+            tbody_array[value.bucket].appendChild(create_tr(key, value));
+            num_rows[value.bucket]++;
         }
         for (let i=0; i<=2; i++){
             table_array[i].appendChild(tbody_array[i]);
-            col_array[i].appendChild(scrollable_array[i]);
-            scrollable_array[i].appendChild(table_array[i]);
+            col_array[i].appendChild(table_array[i]);
         }
         console.log("num_rows: " + num_rows);
     })
 }
 
-function create_arrow(key, tr, cur_bucket, direction){
+function create_tr(key, value){
+    let tr = document.createElement('TR');
+    tr.id = "row_" + key;  //row_english
+    td_array = [];
+    if (value.bucket === 1 || value.bucket === 2){
+        td_array.push(create_arrow(key, tr, value, -1));
+    }
+    let td_key = document.createElement('TD');
+    td_key.id = "row_key_" + key; // row_key_english
+    td_key.classList.add("translation-text-1");
+    td_key.innerText=key;
+    td_array.push(td_key);
+    let td_value = document.createElement('TD');
+    td_value.id = "row_value_" + key; // row_value_english
+    td_value.classList.add("translation-text-2");
+    td_value.innerText=value.trans;
+    td_array.push(td_value);
+    if (value.bucket === 0 || value.bucket === 1){
+        td_array.push(create_arrow(key, tr, value, 1));
+    }
+    for (let td of td_array){
+        tr.appendChild(td);
+    }
+    return tr;
+}
+
+function create_arrow(key, tr, value, direction){
     // -1 = left, 1 = right
     if (direction === -1){
         let td_left_arrow = document.createElement('TD');
         td_left_arrow.id = "row_left_" + key; // row_left_english
         td_left_arrow.innerText="<";
         td_left_arrow.onclick = function(){
-            arrow_handler(tr, cur_bucket-1);
+            arrow_handler(tr, value, value.bucket-1);
         }
         return td_left_arrow;
     }
@@ -87,18 +92,26 @@ function create_arrow(key, tr, cur_bucket, direction){
     td_right_arrow.id = "row_right_" + key;
     td_right_arrow.innerText=">";
     td_right_arrow.onclick = function(){
-        arrow_handler(tr, cur_bucket+1);
+        arrow_handler(tr, value, value.bucket+1);
     }
     return td_right_arrow;
 }
 
-function arrow_handler(rowDiv, destination){
+function arrow_handler(rowDiv, value, dest_bucket){
     key = rowDiv.id.split("row_")[1];
-    bucket_move(key, destination);
-    // remove this rowDiv from this table and add it to another table
-    console.log(rowDiv.childNodes);
-    rowDiv.parentNode.removeChild(rowDiv);
-
+    bucket_move(key, dest_bucket, function(data){ // callback function needed because this is ASYNC
+        if (data == null){
+            console.log("bucket_move returned null!!");
+            break;
+        }
+        // remove this rowDiv from this table and add it to another table
+        mappings = ["inactive_words", "active_words", "learned_words"];
+        dest_tbody = document.getElementById(mappings[dest_bucket]).firstChild;
+        rowDiv.parentNode.removeChild(rowDiv); // remove from current table
+        // reconstruct a new rowDiv from scratch (for simplicity) and add it to the destination table
+        dest_tbody.appendChild(create_tr(key, data.value));
+    });
+    
 }
 
 /* When the user clicks on the button, 
