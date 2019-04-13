@@ -22,14 +22,20 @@ function create_translation_tables(){
         let col_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
         for (let col of col_array){
             col.classList.add("col-sm");
-            // col.classList.add("center-block")
             row.appendChild(col);
         }
-        let scrollable_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
+        let category_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
+        category_array[0].innerText = "Inactive";
+        category_array[1].innerText = "Active";
+        category_array[2].innerText = "Learned";
+        for (let i = 0; i <=2 ; i++){
+            col_array[i].classList.add("category");
+            col_array[i].appendChild(category_array[i]);
+        }
+        // let scrollable_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
         for (let col of col_array){
             col.classList.add("pre-scrollable");
         }
-
         let table_array = [document.createElement("TABLE"), document.createElement("TABLE"), document.createElement("TABLE")];
         table_array[0].id = "inactive_words";
         table_array[1].id = "active_words";
@@ -62,7 +68,7 @@ function create_tr(key, value){
     let td_key = document.createElement('TD');
     td_key.id = "row_key_" + key; // row_key_english
     td_key.classList.add("translation-text-1");
-    td_key.innerText=key;
+    td_key.innerText = key;
     td_array.push(td_key);
     let td_value = document.createElement('TD');
     td_value.id = "row_value_" + key; // row_value_english
