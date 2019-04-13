@@ -24,13 +24,17 @@ function create_translation_tables(){
             col.classList.add("col-sm");
             row.appendChild(col);
         }
+        let scrollable_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
+        for (let col of col_array){
+            col.classList.add("pre-scrollable");
+        }
 
         let table_array = [document.createElement("TABLE"), document.createElement("TABLE"), document.createElement("TABLE")];
         table_array[0].id = "inactive_words";
         table_array[1].id = "active_words";
         table_array[2].id = "learned_words";
         for (let table of table_array){
-            table.classList.add("table-striped")
+            table.classList.add("table-striped");
         }
         let tbody_array = [document.createElement('TBODY'), document.createElement('TBODY'), document.createElement('TBODY')];
 
@@ -43,10 +47,12 @@ function create_translation_tables(){
             }
             let td_key = document.createElement('TD');
             td_key.id = "row_key_" + key; // row_key_english
+            td_key.classList.add("translation-text-1");
             td_key.innerText=key;
             td_array.push(td_key);
             let td_value = document.createElement('TD');
             td_value.id = "row_value_" + key; // row_value_english
+            td_value.classList.add("translation-text-2");
             td_value.innerText=value.trans;
             td_array.push(td_value);
             if (value.bucket === 0 || value.bucket === 1){
@@ -63,7 +69,8 @@ function create_translation_tables(){
         }
         for (let i=0; i<=2; i++){
             table_array[i].appendChild(tbody_array[i]);
-            col_array[i].appendChild(table_array[i]);
+            col_array[i].appendChild(scrollable_array[i]);
+            scrollable_array[i].appendChild(table_array[i]);
         }
         console.log("num_rows: " + num_rows);
     })
@@ -104,7 +111,7 @@ function dropdownFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
   
-// Close the dropdown menu if the user clicks outside of it
+// Close the language dropdown menu if the user clicks outside of it
 window.onclick = function(event) {
     if (!event.target.matches('.dropbtn')) {
         let dropdowns = document.getElementsByClassName("dropdown-content");
@@ -118,7 +125,7 @@ window.onclick = function(event) {
     }
 }
 
-//JS for drop down on click
+//JS for language drop down on click
 document.addEventListener('DOMContentLoaded', function() {
     let link = document.getElementById('dropdownID');
     link.addEventListener('click', function() {
