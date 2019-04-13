@@ -167,3 +167,10 @@ table {
   font-weight: bold;
   color: red;
 }
+
+.category {
+  font-size: 30px;
+  font-weight: bold;
+  color: #FFF;
+  text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+}
