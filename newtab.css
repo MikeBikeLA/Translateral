@@ -122,6 +122,10 @@ body {
   flex-direction: column;
 }
 
+.pre-scrollable{
+  max-height:50vh; /* 50% of window height for now */
+}
+
 btn {
   font-weight: bold;
   flex-grow: 1;
