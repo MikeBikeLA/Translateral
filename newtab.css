@@ -146,6 +146,14 @@ table {
   float: none;
 }
 
+td {
+  padding: 5px;
+}
+
+.container {
+  padding: 0px;
+}
+
 .arrow-button {
   font-size: 28px;
   font-weight: bold;
@@ -163,3 +171,4 @@ table {
 .category .category:hover {
   text-decoration: underline;
 }
+

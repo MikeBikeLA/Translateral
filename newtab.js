@@ -20,6 +20,7 @@ function create_translation_tables(){
         let col_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
         for (let col of col_array){
             col.classList.add("col-sm");
+            col.classList.add("pre-scrollable");
             row.appendChild(col);
         }
         // let category_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
@@ -31,9 +32,6 @@ function create_translation_tables(){
         //     col_array[i].appendChild(category_array[i]);
         // }
         // let scrollable_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
-        for (let col of col_array){
-            col.classList.add("pre-scrollable");
-        }
         let table_array = [document.createElement("TABLE"), document.createElement("TABLE"), document.createElement("TABLE")];
         table_array[0].id = "inactive_words";
         table_array[1].id = "active_words";
