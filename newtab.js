@@ -1,8 +1,17 @@
 // updates the document's num-words-learned value
 function update_num_words_learned(){
     document.getElementById("num-words-learned").innerText = 
-        document.getElementById("learned_words").firstChild.children.length;    
+        document.getElementById("learned_words").firstChild.children.length;
+
+    document.getElementById("inactive").innerText = 
+        "Inactive: " + document.getElementById("inactive_words").firstChild.children.length;
+    document.getElementById("active").innerText = 
+        "Active: " + document.getElementById("active_words").firstChild.children.length;
+    document.getElementById("learned").innerText = 
+        "Learned: " + document.getElementById("learned_words").firstChild.children.length;
 }
+
+
 
 // returns num_rows, which are the counts for the words in [inactive, active, learned]
 function create_translation_tables(){
