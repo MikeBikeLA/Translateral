@@ -2,7 +2,12 @@
     "name": "Translateral",
     "version": "0.1",
     "description": "Actually learn your language!",
-    "permissions": ["storage"],
+    "permissions": [
+        "storage",
+        "tabs",
+        "http://*/*",
+        "https://*/*"
+    ],
     "background": {
         "scripts": [
             "dictionary.js",
@@ -17,7 +22,7 @@
     "chrome_url_overrides" : {
         "newtab": "newtab.html"
     },
-    "options_page": "options.html",
+    "options_page": "newtab.html",
     "content_scripts": [
         {
             "css": [
@@ -26,10 +31,6 @@
             "matches": [
                 "http://*/*",
                 "https://*/*"
-            ],
-            "js": [
-                "user_selected.js",
-                "content.js"
             ],
             "run_at": "document_end"
         }
