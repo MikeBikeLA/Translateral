@@ -31,10 +31,12 @@ function inBlacklist(url){
 }
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
-    if (changeInfo.status === "complete" && !inBlacklist(tab.url)){
-        chrome.tabs.executeScript(null, {file: "content.js"});
-        console.log(tab.url);
+	try{
+	    if (changeInfo.status === "complete" && !inBlacklist(tab.url)){
+	        chrome.tabs.executeScript(null, {file: "content.js"});
+	    }
+    } catch(exc){
+    	console.error(exc);
     }
 });
 
-console.log("background.js loaded");

@@ -261,4 +261,6 @@ function create_def_window(){
 
 // Retrieve the active_dict from chrome.storage and do the replacement
 retrieve_active_dict();
-create_def_window();
+if (!document.getElementById("def_window")){
+    create_def_window();
+}
