@@ -18,9 +18,9 @@ function inBlacklist(url){
     if (url.includes("chrome://") || url.includes("chrome-")){
         return true; // skip chrome urls
     }
-    chrome.storage.sync.get({"website_blacklist": {}}, function(website_blacklist_wrapper){
+    chrome.storage.sync.get({"website_blacklist": []}, function(website_blacklist_wrapper){
         var website_blacklist = website_blacklist_wrapper.website_blacklist;
-        if (Object.keys(website_blacklist).length === 0){ return false; } // empty blacklist
+        if (website_blacklist.length === 0){ return false; } // empty blacklist
         for (const keyword of website_blacklist){
             if (url.includes(keyword)) {
                 return true;

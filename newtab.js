@@ -11,21 +11,21 @@ function update_num_words_learned(){
         "Learned: " + document.getElementById("learned_words").firstChild.children.length;
 }
 
-
-
 // returns num_rows, which are the counts for the words in [inactive, active, learned]
 function create_translation_tables(){
     chrome.storage.local.get({"local_bank": {}}, function(local_bank_wrapper){
         let num_rows = [0, 0, 0]; // contains # of rows to create for each bucket
 
-        let translations_body = document.getElementById("translations_body");
+        let translations_body = document.getElementById("translations-body");
         
-        let container = document.createElement("DIV");
-        container.classList.add("container");
-        translations_body.appendChild(container);
+        // let container = document.createElement("DIV");
+        // container.classList.add("container");
+        // translations_body.appendChild(container);
         let row = document.createElement("DIV");
         row.classList.add("row");
-        container.appendChild(row);
+        row.id = "translation-row";
+        // container.appendChild(row);
+        translations_body.appendChild(row)
         let col_array = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV")];
         for (let col of col_array){
             col.classList.add("col-sm");
@@ -132,9 +132,96 @@ function arrow_handler(rowDiv, value, dest_bucket){
         dest_tbody.appendChild(create_tr(key, value));
         // update the num_words_learned
         update_num_words_learned();
-    });
-    
+    });    
 }
+
+
+// Create a "close" button and append it to each list item
+var myNodelist = document.getElementsByTagName("LI");
+var i;
+for (i = 0; i < myNodelist.length; i++) {
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "close";
+    span.appendChild(txt);
+    myNodelist[i].appendChild(span);
+}
+
+// Click on a close button to hide the current list item
+// var close = document.getElementsByClassName("close");
+// var i;
+// for (i = 0; i < close.length; i++) {
+//     close[i].onclick = function() {
+//         var div = this.parentElement;
+//         div.style.display = "none";
+//     }
+// }
+
+// Add a "checked" symbol when clicking on a list item
+var list = document.querySelector('ul');
+list.addEventListener('click', function(ev) {
+    if (ev.target.tagName === 'LI') {
+        ev.target.classList.toggle('checked');
+    }
+}, false);
+
+// Create a new list item when clicking on the "Add" button
+function newElement(text) {
+    var li = document.createElement("li");
+    
+    if (text == null){
+        var inputValue = document.getElementById("myInput").value;
+        var t = document.createTextNode(inputValue);    
+        if (inputValue === '') {
+            alert("You must write something!");
+        } else {
+            document.getElementById("myUL").appendChild(li);
+        }
+        document.getElementById("myInput").value = "";
+    }
+
+    li.appendChild(t);
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "close";
+    span.appendChild(txt);
+    li.appendChild(span);
+
+
+    span.addEventListener('click', function(){
+        var blacklist_row = span.parentElement;
+        blacklist_row.parentElement.removeChild(blacklist_row);
+        update_blacklist();
+    });
+}
+
+function update_blacklist(){
+    blacklist_items = document.getElementById('myUL').childNodes;
+    chrome.storage.sync.set({"website_blacklist": blacklist_items});  
+    console.log('Updated blacklist');
+}
+
+function populate_blacklist(){
+    chrome.storage.sync.get({"website_blacklist": new Array()}, function(website_blacklist_wrapper){
+        let website_blacklist = website_blacklist_wrapper.website_blacklist;
+        if (website_blacklist.length === 0){ return }    
+        console.log(website_blacklist.length);    
+        console.log(typeof website_blacklist);
+        for (const website of website_blacklist){
+            newElement(website);
+        }
+        console.log('Populated blacklist');
+    });
+}
+
+function blacklist_add_and_sync(){
+    newElement();
+    update_blacklist();
+}
+
+document.getElementById('blacklist_add_button').addEventListener('click', blacklist_add_and_sync);
+
+
 
 /* When the user clicks on the button, 
 toggle between hiding and showing the language dropdown content */
@@ -177,4 +264,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 create_translation_tables();
+populate_blacklist();
 console.log("newtab.js loaded");
